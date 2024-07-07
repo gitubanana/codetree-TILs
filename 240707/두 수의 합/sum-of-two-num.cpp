@@ -1,16 +1,15 @@
 #include <iostream>
-#include <map>
-#define NUM first
-#define CNT second
+#include <unordered_map>
 
-using t_map = std::map<int, int>;
+using t_umap = std::unordered_map<int, int>;
 
 int main()
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
+    int ans = 0;
     int size, goal;
-    t_map map;
+    t_umap umap;
 
     std::cin >> size >> goal;
     while (size--)
@@ -18,33 +17,8 @@ int main()
         int elem;
 
         std::cin >> elem;
-        ++map[elem];
-    }
-
-
-    const int &halfGoalCnt = map[goal / 2];
-    int ans = halfGoalCnt * (halfGoalCnt - 1) / 2;
-    t_map::iterator left = map.begin();
-    t_map::iterator right = map.end();
-    --right;
-
-    while (left != right)
-    {
-        int sum = left->NUM + right->NUM;
-
-        if (sum == goal)
-        {
-            ans += left->CNT * right->CNT;
-            ++left;
-        }
-        else if (sum > goal)
-        {
-            --right;
-        }
-        else
-        {
-            ++left;
-        }
+        ans += umap[goal - elem];
+        ++umap[elem];
     }
 
     std::cout << ans << '\n';
