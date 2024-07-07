@@ -23,7 +23,7 @@ int main()
 
 
     const int &halfGoalCnt = map[goal / 2];
-    int ans = halfGoalCnt * (halfGoalCnt - 1) / 2;
+    int ans = !(goal & 1) * (halfGoalCnt * (halfGoalCnt - 1) / 2);
     t_map::iterator left = map.begin();
     t_map::iterator right = map.end();
     --right;
