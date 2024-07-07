@@ -21,15 +21,12 @@ int main()
         ++map[elem];
     }
 
-    int ans = 0;
+
+    const int &halfGoalCnt = map[goal / 2];
+    int ans = halfGoalCnt * (halfGoalCnt - 1) / 2;
     t_map::iterator left = map.begin();
     t_map::iterator right = map.end();
     --right;
-
-    if (map.size() == 1)
-    {
-        ans = left->CNT * (left->CNT - 1) / 2;
-    }
 
     while (left != right)
     {
