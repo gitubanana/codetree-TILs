@@ -28,7 +28,7 @@ int main()
 
     if (map.size() == 1)
     {
-        ans = left->CNT * (left->CNT) / 2;
+        ans = left->CNT * (left->CNT - 1) / 2;
     }
 
     while (left != right)
