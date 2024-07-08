@@ -132,15 +132,15 @@ void    backTracking(const t_board &cur, int prevDir=-1, int depth=0)
         t_pos &nRed = next.candies[t_board::RED];
         t_pos &nBlue = next.candies[t_board::BLUE];
 
-        if (visited[nRed.y][nRed.x][nBlue.y][nBlue.x])
-            continue ;
-
         switch (status)
         {
             case t_board::SUCCESS:
                 minMove = std::min(minMove, depth + 1);
                 return ;
             case t_board::KEEP_GOING:
+                if (visited[nRed.y][nRed.x][nBlue.y][nBlue.x])
+                    break ;
+
                 backTracking(next, dir, depth + 1);
                 break ;
             case t_board::FAIL:
