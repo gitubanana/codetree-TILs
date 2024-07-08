@@ -18,13 +18,14 @@ int main()
     }
 
     int boss, employee;
-    int64_t ans = toCheck.size();
+    int64_t ans = 0;
 
     std::cin >> boss >> employee;
     for (const int &cur : toCheck)
     {
         int withoutBoss = cur - boss;
 
+        ++ans;
         if (withoutBoss > 0)
         {
             ans += withoutBoss / employee
