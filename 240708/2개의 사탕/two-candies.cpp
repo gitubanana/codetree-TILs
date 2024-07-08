@@ -18,6 +18,7 @@ enum e_dir
     RIGHT
 };
 
+const int MAX_SIZE = 10;
 const int DEPTH_LIMIT = 10;
 const int dy[] = {-1, 1, 0, 0};
 const int dx[] = {0, 0, -1, 1};
@@ -25,6 +26,7 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int ySize, xSize;
 int minMove = INT_MAX;
+bool visited[MAX_SIZE][MAX_SIZE][MAX_SIZE][MAX_SIZE];
 
 struct t_pos
 {
@@ -38,8 +40,6 @@ struct t_pos
 
 struct t_board
 {
-    static const int MAX_SIZE = 10;
-
     enum e_idx
     {
         RED = 0,
@@ -118,13 +118,24 @@ void    backTracking(const t_board &cur, int prevDir=-1, int depth=0)
         return ;
     }
 
+    const t_pos &cRed = cur.candies[t_board::RED];
+    const t_pos &cBlue = cur.candies[t_board::BLUE];
+
+    visited[cRed.y][cRed.x][cBlue.y][cBlue.x] = true;
     for (int dir = 0; dir < dirSize; ++dir)
     {
         if (dir == prevDir)
             continue ;
 
         t_board next = cur;
-        switch (next.move(dir))
+        int status = next.move(dir);
+        t_pos &nRed = next.candies[t_board::RED];
+        t_pos &nBlue = next.candies[t_board::BLUE];
+
+        if (visited[nRed.y][nRed.x][nBlue.y][nBlue.x])
+            continue ;
+
+        switch (status)
         {
             case t_board::SUCCESS:
                 minMove = std::min(minMove, depth + 1);
@@ -153,10 +164,10 @@ int main()
         {
             switch (init.map[y][x])
             {
-                case RED:
+                case e_space::RED:
                     init.candies[t_board::RED] = {y, x};
                     break ;
-                case BLUE:
+                case e_space::BLUE:
                     init.candies[t_board::BLUE] = {y, x};
                     break ;
             }
