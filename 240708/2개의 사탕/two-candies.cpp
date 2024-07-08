@@ -121,7 +121,6 @@ void    backTracking(const t_board &cur, int prevDir=-1, int depth=0)
     const t_pos &cRed = cur.candies[t_board::RED];
     const t_pos &cBlue = cur.candies[t_board::BLUE];
 
-    visited[cRed.y][cRed.x][cBlue.y][cBlue.x] = true;
     for (int dir = 0; dir < dirSize; ++dir)
     {
         if (dir == prevDir)
@@ -129,8 +128,8 @@ void    backTracking(const t_board &cur, int prevDir=-1, int depth=0)
 
         t_board next = cur;
         int status = next.move(dir);
-        t_pos &nRed = next.candies[t_board::RED];
-        t_pos &nBlue = next.candies[t_board::BLUE];
+        const t_pos &nRed = next.candies[t_board::RED];
+        const t_pos &nBlue = next.candies[t_board::BLUE];
 
         switch (status)
         {
@@ -141,7 +140,9 @@ void    backTracking(const t_board &cur, int prevDir=-1, int depth=0)
                 if (visited[nRed.y][nRed.x][nBlue.y][nBlue.x])
                     break ;
 
+                visited[cRed.y][cRed.x][cBlue.y][cBlue.x] = true;
                 backTracking(next, dir, depth + 1);
+                visited[cRed.y][cRed.x][cBlue.y][cBlue.x] = false;
                 break ;
             case t_board::FAIL:
                 break ;
