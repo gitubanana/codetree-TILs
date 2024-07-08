@@ -1,29 +1,30 @@
 #include <iostream>
-
-const int MAX_SIZE = 1'000'000;
+#include <vector>
 
 int main()
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
     int size;
-    int boss, employee;
-    int toCheck[MAX_SIZE];
+    std::vector<int> toCheck;
 
     std::cin >> size;
-    for (int i = 0; i < size; ++i)
+    while (size--)
     {
-        std::cin >> toCheck[MAX_SIZE];
+        int checkPeople;
+
+        std::cin >> checkPeople;
+        toCheck.push_back(checkPeople);
     }
 
-    int64_t ans = 0;
+    int boss, employee;
+    int64_t ans = toCheck.size();
+
     std::cin >> boss >> employee;
-    for (int i = 0; i < size; ++i)
+    for (const int &cur : toCheck)
     {
-        int &cur = toCheck[i];
         int withoutBoss = cur - boss;
 
-        ++ans;
         if (withoutBoss > 0)
         {
             ans += withoutBoss / employee
