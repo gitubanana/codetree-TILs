@@ -68,12 +68,11 @@ struct t_dice
                 break ;
         }
 
-        char &space = map[this->y][this->x];
         char &floor = num[FLOOR];
+        char &space = map[this->y][this->x];
         if (space == '0')
         {
             space = floor;
-            floor = '0';
         }
         else
         {
