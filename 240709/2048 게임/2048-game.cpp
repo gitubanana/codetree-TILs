@@ -100,6 +100,7 @@ void    backTracking(t_board &cur, int depth=0)
         return ;
     }
 
+
     int dirCnt = 4;
     while (dirCnt--)
     {
