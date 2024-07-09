@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <tuple>
 
 enum e_dir
 {
@@ -8,6 +7,16 @@ enum e_dir
     WEST,
     NORTH,
     SOUTH
+};
+
+enum e_idx
+{
+    UP = 0,
+    DOWN,
+    LEFT,
+    RIGHT,
+    CEIL,
+    FLOOR
 };
 
 const int MAX_SIZE = 20;
@@ -19,13 +28,12 @@ char map[MAX_SIZE][MAX_SIZE + 1];
 
 struct t_dice
 {
-    const static int FACE_NUM = 6 + 1;
+    const static int SIZE = 6;
 
     int y, x;
-    int up, front, right;
     std::vector<char> num;
 
-    t_dice(void) : up(1), front(2), right(3), num(FACE_NUM, '0') { }
+    t_dice(void) : num(SIZE, '0') { }
 
     inline bool move(int dir)
     {
@@ -43,23 +51,24 @@ struct t_dice
 
     inline void rotate(int dir)
     {
+        // up, down, left, right, ceil, floor
         switch (dir)
         {
             case EAST:
-                std::tie(up, front, right) = std::make_tuple(FACE_NUM - right, front, up);
+                num = {num[UP], num[DOWN], num[FLOOR], num[CEIL], num[LEFT], num[RIGHT]};
                 break ;
             case WEST:
-                std::tie(up, front, right) = std::make_tuple(right, front, FACE_NUM - up);
+                num = {num[UP], num[DOWN], num[CEIL], num[FLOOR], num[RIGHT], num[LEFT]};
                 break ;
             case NORTH:
-                std::tie(up, front, right) = std::make_tuple(front, FACE_NUM - up, right);
+                num = {num[CEIL], num[FLOOR], num[LEFT], num[RIGHT], num[DOWN], num[UP]};
                 break ;
             case SOUTH:
-                std::tie(up, front, right) = std::make_tuple(FACE_NUM - front, up, right);
+                num = {num[FLOOR], num[CEIL], num[LEFT], num[RIGHT], num[UP], num[DOWN]};
                 break ;
         }
 
-        char &floor = num[FACE_NUM - up];
+        char &floor = num[FLOOR];
         char &space = map[this->y][this->x];
         if (space == '0')
         {
@@ -98,7 +107,7 @@ int main()
             continue ;
 
         dice.rotate(dir);
-        std::cout << dice.num[dice.up] << '\n';
+        std::cout << dice.num[CEIL] << '\n';
     }
     return 0;
 }
