@@ -23,6 +23,7 @@ int main()
         std::cin >> works[i].day >> works[i].pay;
     }
 
+    int maxPrev = 0;
     for (int curDay = 0; curDay < limitDay; ++curDay)
     {
         t_work &curWork = works[curDay];
@@ -31,9 +32,14 @@ int main()
         if (nextDay > limitDay)
             continue ;
 
+        maxPrev = std::max(
+            maxPrev,
+            dp[curDay]
+        );
+
         dp[nextDay] = std::max(
             dp[nextDay],
-            dp[curDay] + curWork.pay
+            maxPrev + curWork.pay
         );
     }
 
