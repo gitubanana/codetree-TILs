@@ -25,13 +25,13 @@ int main()
 
     for (int curDay = 0; curDay < limitDay; ++curDay)
     {
+        t_work &curWork = works[curDay];
+        int nextDay = curDay + curWork.day;
+
         dp[curDay] = std::max(
             dp[curDay],
             dp[(curDay - 1) * (curDay > 0)]
         );
-
-        t_work &curWork = works[curDay];
-        int nextDay = curDay + curWork.day;
 
         if (nextDay > limitDay)
             continue ;
