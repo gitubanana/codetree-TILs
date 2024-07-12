@@ -29,13 +29,13 @@ int main()
         t_work &curWork = works[curDay];
         int nextDay = curDay + curWork.day;
 
-        if (nextDay > limitDay)
-            continue ;
-
         maxPrev = std::max(
             maxPrev,
             dp[curDay]
         );
+
+        if (nextDay > limitDay)
+            continue ;
 
         dp[nextDay] = std::max(
             dp[nextDay],
