@@ -8,7 +8,7 @@ int ans = INT_MAX;
 bool isDay[MAX_SIZE];
 int intensity[MAX_SIZE][MAX_SIZE];
 
-void    findMin(int start=0, int cnt=0)
+void    findMin(int cur=0, int cnt=0)
 {
     static const int cntLimit = size / 2;
 
@@ -32,14 +32,14 @@ void    findMin(int start=0, int cnt=0)
         return ;
     }
 
-    if (start == size)
+    if (cur == size)
         return ;
 
-    findMin(start + 1, cnt);
+    findMin(cur + 1, cnt);
 
-    isDay[start] = true;
-    findMin(start + 1, cnt + 1);
-    isDay[start] = false;
+    isDay[cur] = true;
+    findMin(cur + 1, cnt + 1);
+    isDay[cur] = false;
 }
 
 int main()
