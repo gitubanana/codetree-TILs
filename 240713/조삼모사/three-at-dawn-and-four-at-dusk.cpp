@@ -8,11 +8,11 @@ int ans = INT_MAX;
 bool isDay[MAX_SIZE];
 int intensity[MAX_SIZE][MAX_SIZE];
 
-void    backTracking(int start=0, int depth=0)
+void    findMin(int start=0, int cnt=0)
 {
-    static const int depthLimit = size / 2;
+    static const int cntLimit = size / 2;
 
-    if (depth == depthLimit)
+    if (cnt == cntLimit)
     {
         int sum[2] = {0, 0};
 
@@ -32,12 +32,14 @@ void    backTracking(int start=0, int depth=0)
         return ;
     }
 
-    for (int i = start; i < size; ++i)
-    {
-        isDay[i] = true;
-        backTracking(i + 1, depth + 1);
-        isDay[i] = false;
-    }
+    if (start == size)
+        return ;
+
+    findMin(start + 1, cnt);
+
+    isDay[start] = true;
+    findMin(start + 1, cnt + 1);
+    isDay[start] = false;
 }
 
 int main()
@@ -53,7 +55,7 @@ int main()
         }
     }
 
-    backTracking();
+    findMin();
     std::cout << ans << '\n';
     return 0;
 }
