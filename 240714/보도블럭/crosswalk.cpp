@@ -61,7 +61,8 @@ bool isWalkable(int y, int x, int dy, int dx)
                 y -= dy;
                 x -= dx;
             }
-            else if (height[y][x] != nextHeight)
+            else if (height[y][x] != 0
+                     && height[y][x] != nextHeight)
             {
                 return (false);
             }
