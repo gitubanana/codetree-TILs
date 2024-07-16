@@ -28,7 +28,6 @@ t_2d dirsByType[] = {
 int min = INT_MAX;
 int ySize, xSize, totalCnt;
 int map[MAX_SIZE][MAX_SIZE];
-int cnt[MAX_SIZE][MAX_SIZE];
 std::vector<t_pos> horses;
 
 inline bool isBound(const t_pos &pos)
@@ -37,26 +36,36 @@ inline bool isBound(const t_pos &pos)
             && (0 <= pos.x && pos.x < xSize));
 }
 
-void    backTracking(int depth=0, int totalGo=0)
+inline int getCannotGoCnt(void)
+{
+    int ret = 0;
+
+    for (int y = 0; y < ySize; ++y)
+    {
+        for (int x = 0; x < xSize; ++x)
+        {
+            ret += (map[y][x] == 0);
+        }
+    }
+    return (ret);
+}
+
+void    backTracking(int depth=0)
 {
     if (depth == horses.size())
     {
-        min = std::min(min, totalCnt - totalGo);
+        min = std::min(min, getCannotGoCnt());
         return ;
     }
     
     const int &y = horses[depth].y;
     const int &x = horses[depth].x;
-    const int &space = map[y][x];
+    const int &type = map[y][x];
 
     std::vector<t_pos> checked;
-    for (const t_vec<int> &dirs : dirsByType[space])
+    for (const t_vec<int> &dirs : dirsByType[type])
     {
         checked.clear();
-        int plus = (cnt[y][x] == 0);
-
-        cnt[y][x] += space;
-        checked.push_back({y, x});
         for (const int &dir : dirs)
         {
             t_pos cur = {
@@ -67,14 +76,12 @@ void    backTracking(int depth=0, int totalGo=0)
             while (isBound(cur))
             {
                 int &curSpace = map[cur.y][cur.x];
-                int &curCnt = cnt[cur.y][cur.x];
                 if (curSpace == ENEMY)
                     break ;
 
-                if (curCnt == 0)
+                if (curSpace == 0)
                 {
-                    ++plus;
-                    curCnt += space;
+                    curSpace += type;
                     checked.push_back(cur);
                 }
                 cur.y += dy[dir];
@@ -82,11 +89,11 @@ void    backTracking(int depth=0, int totalGo=0)
             }
         }
 
-        backTracking(depth + 1, totalGo + plus);
+        backTracking(depth + 1);
 
         for (const t_pos &pos : checked)
         {
-            cnt[pos.y][pos.x] -= space;
+            map[pos.y][pos.x] -= type;
         }
     }
 }
@@ -103,17 +110,9 @@ int main(void)
             int &space = map[y][x];
 
             std::cin >> space;
-            switch (space)
+            if (space != 0 && space != ENEMY)
             {
-                case ENEMY:
-                    break ;
-                default:
-                    ++totalCnt;
-                    if (space != 0)
-                    {
-                        horses.push_back({y, x});
-                    }
-                    break ;
+                horses.push_back({y, x});
             }
         }
     }
