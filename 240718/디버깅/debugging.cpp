@@ -11,30 +11,27 @@ bool connected[MAX_Y][MAX_X];
 
 bool isOk(void)
 {
-    static int finalX[MAX_X];
-
     for (int x = 1; x <= xSize; ++x)
     {
-        finalX[x] = x;
-    }
+        int curX = x;
+        int curY = 1;
 
-    for (int y = 1; y <= ySize; ++y)
-    {
-        for (int x = 1; x < xSize; ++x)
+        while (curY <= ySize)
         {
-            if (connected[y][x])
+            for (int dx = -1; dx <= 0; ++dx)
             {
-                std::swap(finalX[x], finalX[x + 1]);
+                if (connected[curY][curX + dx])
+                {
+                    curX += (dx == 0 ? 1 : -1);
+                    break ;
+                }
             }
-        }
-    }
 
-    for (int x = 1; x <= xSize; ++x)
-    {
-        if (finalX[x] != x)
-        {
-            return (false);
+            ++curY;
         }
+
+        if (curX != x)
+            return (false);
     }
 
     return (true);
