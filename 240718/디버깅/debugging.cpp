@@ -58,6 +58,11 @@ void    backTracking(int depth=0)
             isLine[y][x] = true;
             backTracking(depth + 1);
             isLine[y][x] = false;
+
+            while (!isLine[y][x - 1] && !isLine[y][x + 1])
+            {
+                ++y;
+            }
         }
     }
 }
