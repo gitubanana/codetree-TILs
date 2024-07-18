@@ -2,12 +2,12 @@
 #include <climits>
 
 const int MAX_Y = 30 + 1;
-const int MAX_X = 10 + 1;
+const int MAX_X = 10 + 2;
 const int DEPTH_LIMIT = 3;
 
 int min = INT_MAX;
 int ySize, xSize;
-bool connected[MAX_Y][MAX_X];
+bool isLine[MAX_Y][MAX_X];
 
 bool isOk(void)
 {
@@ -17,9 +17,9 @@ bool isOk(void)
 
         for (int y = 1; y <= ySize; ++y)
         {
-            if (connected[y][curX])
+            if (isLine[y][curX])
                 ++curX;
-            else if (connected[y][curX - 1])
+            else if (isLine[y][curX - 1])
                 --curX;
         }
 
@@ -30,17 +30,13 @@ bool isOk(void)
     return (true);
 }
 
-inline bool nextOk(int y, int x)
+void    backTracking(int depth=0)
 {
-    ++x;
-    if (x > xSize)
-        return (true);
+    if (min <= depth)
+    {
+        return ;
+    }
 
-    return !connected[y][x];
-}
-
-void    backTracking(int y=1, int x=1, int depth=0)
-{
     if (isOk())
     {
         min = depth;
@@ -52,35 +48,17 @@ void    backTracking(int y=1, int x=1, int depth=0)
         return ;
     }
 
-    while (true)
+    for (int x = 1; x <= xSize; ++x)
     {
-        if (x > xSize)
+        for (int y = 1; y <= ySize; ++y)
         {
-            x = 0;
-            ++y;
-            if (y > ySize)
-                break ;
-        }
+            if (isLine[y][x - 1] || isLine[y][x] || isLine[y][x + 1])
+                continue ;
 
-        bool &curConnected = connected[y][x];
-        if (!curConnected)
-        {
-            if (nextOk(y, x))
-            {
-                curConnected = true;
-                backTracking(y, x + 2, depth + 1);
-                curConnected = false;
-
-                if (min <= depth + 1)
-                    break ;
-            }
+            isLine[y][x] = true;
+            backTracking(depth + 1);
+            isLine[y][x] = false;
         }
-        else
-        {
-            ++x;
-        }
-
-        ++x;
     }
 }
 
@@ -96,7 +74,7 @@ int main()
         int y, x;
 
         std::cin >> y >> x;
-        connected[y][x] = true;
+        isLine[y][x] = true;
     }
 
     backTracking();
