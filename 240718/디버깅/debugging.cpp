@@ -37,6 +37,15 @@ bool isOk(void)
     return (true);
 }
 
+inline bool nextOk(int y, int x)
+{
+    ++x;
+    if (x > xSize)
+        return (true);
+
+    return !connected[y][x];
+}
+
 void    backTracking(int y=1, int x=1, int depth=0)
 {
     if (isOk())
@@ -63,12 +72,15 @@ void    backTracking(int y=1, int x=1, int depth=0)
         bool &curConnected = connected[y][x];
         if (!curConnected)
         {
-            curConnected = true;
-            backTracking(y, x + 2, depth + 1);
-            curConnected = false;
+            if (nextOk(y, x))
+            {
+                curConnected = true;
+                backTracking(y, x + 2, depth + 1);
+                curConnected = false;
 
-            if (min <= depth + 1)
-                break ;
+                if (min <= depth + 1)
+                    break ;
+            }
         }
         else
         {
