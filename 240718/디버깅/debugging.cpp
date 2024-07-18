@@ -70,6 +70,10 @@ void    backTracking(int y=1, int x=1, int depth=0)
             if (min <= depth + 1)
                 break ;
         }
+        else
+        {
+            ++x;
+        }
 
         ++x;
     }
