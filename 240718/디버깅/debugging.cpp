@@ -14,20 +14,13 @@ bool isOk(void)
     for (int x = 1; x <= xSize; ++x)
     {
         int curX = x;
-        int curY = 1;
 
-        while (curY <= ySize)
+        for (int y = 1; y <= ySize; ++y)
         {
-            for (int dx = -1; dx <= 0; ++dx)
-            {
-                if (connected[curY][curX + dx])
-                {
-                    curX += (dx == 0 ? 1 : -1);
-                    break ;
-                }
-            }
-
-            ++curY;
+            if (connected[y][curX])
+                ++curX;
+            else if (connected[y][curX - 1])
+                --curX;
         }
 
         if (curX != x)
