@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <queue>
 
 struct t_pos
 {
@@ -18,6 +19,7 @@ int sum;
 int map[MAX_SIZE][MAX_SIZE];
 bool visited[MAX_SIZE][MAX_SIZE];
 std::vector<t_pos> toChange;
+std::queue<t_pos> toCheck;
 
 void    dfs(const t_pos &cur)
 {
@@ -48,34 +50,33 @@ void    dfs(const t_pos &cur)
     }
 }
 
-bool simulation(void)
+void simulation(void)
 {
-    bool ret = false;
+    int qSize = toCheck.size();
 
     memset(visited, false, sizeof(visited));
-    for (int y = 0; y < size; ++y)
+    while (qSize--)
     {
-        for (int x = 0; x < size; x += 2)
+        t_pos cur = toCheck.front();
+        toCheck.pop();
+
+        if (visited[cur.y][cur.x])
+            continue ;
+
+        sum = 0;
+        toChange.clear();
+        dfs(cur);
+        if (toChange.size() > 1)
         {
-            if (visited[y][x])
-                continue ;
+            int avg = sum / toChange.size();
 
-            sum = 0;
-            toChange.clear();
-            dfs({y, x});
-            if (toChange.size() > 1)
+            for (const t_pos &pos : toChange)
             {
-                int avg = sum / toChange.size();
-
-                for (const t_pos &pos : toChange)
-                {
-                    map[pos.y][pos.x] = avg;
-                }
-                ret = true;
+                toCheck.push(pos);
+                map[pos.y][pos.x] = avg;
             }
         }
     }
-    return (ret);
 }
 
 int main()
@@ -88,14 +89,16 @@ int main()
         for (int x = 0; x < size; ++x)
         {
             std::cin >> map[y][x];
+            toCheck.push({y, x});
         }
     }
 
-    int ans = 0;
-    while (simulation())
+    int ans = -1;
+    do
     {
         ++ans;
-    }
+        simulation();
+    } while (!toCheck.empty());
 
     std::cout << ans << '\n';
     return 0;
