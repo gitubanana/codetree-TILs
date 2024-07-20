@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-#include <queue>
+#include <deque>
 
 struct t_pos
 {
@@ -19,7 +19,7 @@ int sum;
 int map[MAX_SIZE][MAX_SIZE];
 bool visited[MAX_SIZE][MAX_SIZE];
 std::vector<t_pos> toChange;
-std::queue<t_pos> toCheck;
+std::deque<t_pos> toCheck;
 
 void    dfs(const t_pos &cur)
 {
@@ -58,7 +58,7 @@ void simulation(void)
     while (qSize--)
     {
         t_pos cur = toCheck.front();
-        toCheck.pop();
+        toCheck.pop_front();
 
         if (visited[cur.y][cur.x])
             continue ;
@@ -72,7 +72,7 @@ void simulation(void)
 
             for (const t_pos &pos : toChange)
             {
-                toCheck.push(pos);
+                toCheck.push_back(pos);
                 map[pos.y][pos.x] = avg;
             }
         }
@@ -84,13 +84,12 @@ int main()
     std::cin.tie(0)->sync_with_stdio(0);
 
     std::cin >> size >> L >> R;
-    toCheck.reserve(size * size);
     for (int y = 0; y < size; ++y)
     {
         for (int x = 0; x < size; ++x)
         {
             std::cin >> map[y][x];
-            toCheck.push({y, x});
+            toCheck.push_back({y, x});
         }
     }
 
