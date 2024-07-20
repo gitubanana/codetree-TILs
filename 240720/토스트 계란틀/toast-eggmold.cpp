@@ -84,6 +84,7 @@ int main()
     std::cin.tie(0)->sync_with_stdio(0);
 
     std::cin >> size >> L >> R;
+    toChange.reserve(size * size);
     for (int y = 0; y < size; ++y)
     {
         for (int x = 0; x < size; ++x)
