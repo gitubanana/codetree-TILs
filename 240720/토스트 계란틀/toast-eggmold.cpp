@@ -55,7 +55,7 @@ bool simulation(void)
     memset(visited, false, sizeof(visited));
     for (int y = 0; y < size; ++y)
     {
-        for (int x = 0; x < size; ++x)
+        for (int x = 0; x < size; x += 2)
         {
             if (visited[y][x])
                 continue ;
