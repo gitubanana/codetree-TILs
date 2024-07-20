@@ -15,11 +15,13 @@ struct t_pos
 };
 
 const int MAX_HOSPITAL = 13;
+const int MAX_SIZE = 50;
 
 int minDist = INT_MAX, depthLimit;
 std::vector<t_pos> people;
 std::vector<t_pos> hospitals;
 std::vector<int> chosen;
+int dists[MAX_SIZE * 2][MAX_HOSPITAL];
 
 inline int getDist(const t_pos &a, const t_pos &b)
 {
@@ -30,13 +32,13 @@ inline int getHospitalDist(void)
 {
     int totalDist = 0;
 
-    for (const t_pos &person : people)
+    for (int pIdx = 0; pIdx < people.size(); ++pIdx)
     {
         int min = INT_MAX;
 
-        for (const int &idx : chosen)
+        for (const int &hIdx : chosen)
         {
-            min = std::min(min, getDist(person, hospitals[idx]));
+            min = std::min(min, dists[pIdx][hIdx]);
         }
 
         totalDist += min;
@@ -89,6 +91,14 @@ int main(void)
                     hospitals.push_back({y, x});
                     break ;
             }
+        }
+    }
+
+    for (int pIdx = 0; pIdx < people.size(); ++pIdx)
+    {
+        for (int hIdx = 0; hIdx < hospitals.size(); ++hIdx)
+        {
+            dists[pIdx][hIdx] = getDist(people[pIdx], hospitals[hIdx]);
         }
     }
 
