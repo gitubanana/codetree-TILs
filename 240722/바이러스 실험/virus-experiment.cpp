@@ -108,8 +108,7 @@ int main()
         int y, x, age;
 
         std::cin >> y >> x >> age;
-        --y, --x;
-        virusAges[y][x].push_back(age);
+        virusAges[y - 1][x - 1].push_back(age);
     }
 
     while (cycleCnt--)
