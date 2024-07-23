@@ -6,8 +6,8 @@
 
 enum e_space
 {
-    EMPTY = 0,
-    ME = 9
+    EMPTY = '0',
+    ME = '9'
 };
 
 struct t_pos
@@ -32,8 +32,8 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int size;
 t_pos me;
-int myLevel = 2;
-int map[MAX_SIZE][MAX_SIZE];
+int myLevel = '2';
+char map[MAX_SIZE][MAX_SIZE];
 bool visited[MAX_SIZE][MAX_SIZE];
 
 int bfs(void)
@@ -67,7 +67,7 @@ int bfs(void)
                     continue ;
 
                 visited[next.y][next.x] = true;
-                int &cmpLevel = map[next.y][next.x];
+                char &cmpLevel = map[next.y][next.x];
                 if (cmpLevel > myLevel)
                     continue ;
 
@@ -104,7 +104,7 @@ int main()
     {
         for (int x = 0; x < size; ++x)
         {
-            int &space = map[y][x];
+            char &space = map[y][x];
 
             std::cin >> space;
             if (space == ME)
