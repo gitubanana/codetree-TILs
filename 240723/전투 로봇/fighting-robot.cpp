@@ -32,8 +32,8 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int size;
 t_pos me;
-int myLevel = '2';
-char map[MAX_SIZE][MAX_SIZE];
+char myLevel = '2';
+char map[MAX_SIZE][MAX_SIZE + 1];
 bool visited[MAX_SIZE][MAX_SIZE];
 
 int bfs(void)
@@ -67,6 +67,7 @@ int bfs(void)
                     continue ;
 
                 visited[next.y][next.x] = true;
+        
                 char &cmpLevel = map[next.y][next.x];
                 if (cmpLevel > myLevel)
                     continue ;
@@ -116,7 +117,7 @@ int main()
     }
 
     int ans = 0;
-    int eatCnt = 0;
+    char eatCnt = '0';
     while (true)
     {
         int moveCnt = bfs();
@@ -128,7 +129,7 @@ int main()
         if (myLevel == eatCnt)
         {
             ++myLevel;
-            eatCnt = 0;
+            eatCnt = '0';
         }
     }
 
