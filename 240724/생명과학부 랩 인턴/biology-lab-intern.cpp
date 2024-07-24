@@ -91,6 +91,15 @@ int main(void)
         std::cin >> p.y >> p.x >> p.speed >> p.dir >> size;
         --p.y, --p.x, --p.dir;
 
+        if (p.dir <= 1)
+        {
+            p.speed %= (2 * ySize - 2);
+        }
+        else
+        {
+            p.speed %= (2 * xSize - 2);
+        }
+
         map[p.y][p.x] = size;
         molds.insert({size, p});
     }
