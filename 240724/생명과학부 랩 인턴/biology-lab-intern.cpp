@@ -50,7 +50,7 @@ bool move(int size, t_pos &pos)
         }
         else if (pos.x >= xSize)
         {
-            pos.x = 2 * (xSize - 1) - pos.x - 1;
+            pos.x = 2 * (xSize - 1) - pos.x;
         }
         else if (pos.x < 0)
         {
