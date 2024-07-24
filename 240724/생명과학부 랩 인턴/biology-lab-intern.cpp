@@ -39,25 +39,25 @@ bool move(int size, t_pos &pos)
         int nextX = pos.x + dx[pos.dir] * moveCnt;
 
         pos.dir ^= 1;
-        if (nextY > ySize)
+        if (nextY >= ySize)
         {
-            moveCnt -= ySize - pos.y;
-            pos.y = ySize;
+            moveCnt -= ySize - pos.y - 1;
+            pos.y = ySize - 1;
         }
-        else if (nextY < 1)
+        else if (nextY < 0)
         {
-            moveCnt -= pos.y - 1;
-            pos.y = 1;
+            moveCnt -= pos.y;
+            pos.y = 0;
         }
-        else if (nextX > xSize)
+        else if (nextX >= xSize)
         {
-            moveCnt -= xSize - pos.x;
-            pos.x = xSize;
+            moveCnt -= xSize - pos.x - 1;
+            pos.x = xSize - 1;
         }
-        else if (nextX < 1)
+        else if (nextX < 0)
         {
-            moveCnt -= pos.x - 1;
-            pos.x = 1;
+            moveCnt -= pos.x;
+            pos.x = 0;
         }
         else
         {
