@@ -27,7 +27,7 @@ std::map<int, t_pos, std::greater<int>> molds;
 bool move(int size, t_pos &pos)
 {
     int &oldSpace = map[pos.y][pos.x];
-    if (oldSpace == size)
+    if (pos.speed != 0 && oldSpace == size)
     {
         oldSpace = EMPTY;
     }
