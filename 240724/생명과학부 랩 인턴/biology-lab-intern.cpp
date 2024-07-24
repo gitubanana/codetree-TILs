@@ -42,7 +42,7 @@ bool move(int size, t_pos &pos)
 
         if (pos.y >= ySize)
         {
-            pos.y = 2 * ySize - pos.y - 1;
+            pos.y = 2 * (ySize - 1) - pos.y;
         }
         else if (pos.y < 0)
         {
@@ -50,7 +50,7 @@ bool move(int size, t_pos &pos)
         }
         else if (pos.x >= xSize)
         {
-            pos.x = 2 * xSize - pos.x - 1;
+            pos.x = 2 * (xSize - 1) - pos.x - 1;
         }
         else if (pos.x < 0)
         {
@@ -83,7 +83,7 @@ int main(void)
         std::cin >> p.y >> p.x >> p.speed >> p.dir >> size;
         --p.y, --p.x, --p.dir;
 
-        p.speed %= (2 * (((p.dir <= 1) ? ySize : xSize) - 1));
+        p.speed %= 2 * ((p.dir <= 1 ? ySize : xSize) - 1);
         map[p.y][p.x] = size;
         molds.insert({size, p});
     }
