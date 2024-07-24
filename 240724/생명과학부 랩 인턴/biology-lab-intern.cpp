@@ -32,40 +32,32 @@ bool move(int size, t_pos &pos)
         oldSpace = EMPTY;
     }
 
-    int moveCnt = pos.speed;
-    while (moveCnt)
+    pos.y += dy[pos.dir] * pos.speed;
+    pos.x += dx[pos.dir] * pos.speed;
+    for (int move = 0; move < 2; ++move)
     {
-        int nextY = pos.y + dy[pos.dir] * moveCnt;
-        int nextX = pos.x + dx[pos.dir] * moveCnt;
+        if ((0 <= pos.y && pos.y < ySize)
+            && (0 <= pos.x && pos.x < xSize))
+            break ;
+
+        if (pos.y >= ySize)
+        {
+            pos.y = 2 * ySize - pos.y - 1;
+        }
+        else if (pos.y < 0)
+        {
+            pos.y = -pos.y;
+        }
+        else if (pos.x >= xSize)
+        {
+            pos.x = 2 * xSize - pos.x - 1;
+        }
+        else if (pos.x < 0)
+        {
+            pos.x = -pos.x;
+        }
 
         pos.dir ^= 1;
-        if (nextY >= ySize)
-        {
-            moveCnt -= ySize - pos.y - 1;
-            pos.y = ySize - 1;
-        }
-        else if (nextY < 0)
-        {
-            moveCnt -= pos.y;
-            pos.y = 0;
-        }
-        else if (nextX >= xSize)
-        {
-            moveCnt -= xSize - pos.x - 1;
-            pos.x = xSize - 1;
-        }
-        else if (nextX < 0)
-        {
-            moveCnt -= pos.x;
-            pos.x = 0;
-        }
-        else
-        {
-            pos.y = nextY;
-            pos.x = nextX;
-            pos.dir ^= 1;
-            break ;
-        }
     }
 
     int &newSpace = map[pos.y][pos.x];
