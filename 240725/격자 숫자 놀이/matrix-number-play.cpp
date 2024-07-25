@@ -69,6 +69,11 @@ void    sortRow(void)
             if (x == MAX_SIZE)
                 break ;
         }
+
+        for (; x < xSize; ++x)
+        {
+            map[y][x] = 0;
+        }
     }
 
     xSize = maxXsize;
@@ -114,6 +119,11 @@ void    sortCol(void)
             map[y++][x] = cur.cnt;
             if (y == MAX_SIZE)
                 break ;
+        }
+
+        for (; y < ySize; ++y)
+        {
+            map[y][x] = 0;
         }
     }
 
