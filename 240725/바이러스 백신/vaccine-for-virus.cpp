@@ -61,7 +61,7 @@ int bfs(void)
 
                 if (!(0 <= next.y && next.y < size)
                     || !(0 <= next.x && next.x < size)
-                    || map[next.y][next.x] == WALL
+                    || map[next.y][next.x] != VIRUS
                     || visited[next.y][next.x])
                     continue ;
 
