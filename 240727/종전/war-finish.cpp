@@ -107,18 +107,6 @@ void    calculate(void)
     static int people[tribeCnt];
 
     memset(people, 0, sizeof(people));
-    // std::cout << "===================" << '\n';
-    // std::cout << "startY : " << startY << ", startX : " << startX << '\n';
-    // std::cout << "d1 : " << dist[0] << ", d2 : " << dist[1] << '\n';
-    // for (int y = 0; y < size; ++y)
-    // {
-    //     for (int x = 0; x < size; ++x)
-    //     {
-    //         std::cout << tribeZero[y][x] << ' ';
-    //     }
-    //     std::cout << '\n';
-    // }
-
     for (int y = 0; y < size; ++y)
     {
         for (int x = 0; x < size; ++x)
