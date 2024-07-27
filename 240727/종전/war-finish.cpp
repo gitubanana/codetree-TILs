@@ -9,116 +9,121 @@ int dist[2];
 int size, minDiff = INT_MAX;
 int startY, startX;
 int map[MAX_SIZE][MAX_SIZE];
-bool tribeZero[MAX_SIZE][MAX_SIZE];
+int tribeIdx[MAX_SIZE][MAX_SIZE];
 
-void    dfs(int y, int x)
+void    makeBorder(void)
 {
-    static const int dy[] = {-1, 1, 0, 0};
-    static const int dx[] = {0, 0, -1, 1};
-    static const int dirSize = sizeof(dy) / sizeof(dy[0]);
-
-    tribeZero[y][x] = true;
-    for (int dir = 0; dir < dirSize; ++dir)
-    {
-        int nextY = y + dy[dir];
-        int nextX = x + dx[dir];
-
-        if (!(0 <= nextY && nextY < size)
-            || !(0 <= nextX && nextX < size)
-            || tribeZero[nextY][nextX])
-            continue ;
-
-        dfs(nextY, nextX);
-    }
-}
-
-void    fillDiagonal(int y, int x)
-{
-    static const int dy[] = {-1, -1};
-    static const int dx[] = {1, -1};
-
-    int dIdx = (dist[0] == 1);
-    int move = dist[dIdx];
-
-    while (move--)
-    {
-        tribeZero[y][x] = true;
-        y += dy[dIdx];
-        x += dx[dIdx];
-    }
-}
-
-void    makeBorder(int y, int x)
-{
-    static const int dy[] = {-1, -1, 1, 1};
-    static const int dx[] = {1, -1, -1, 1};
-    static const int dirSize = sizeof(dy) / sizeof(dy[0]);
-
-    int dIdx;
-
-    memset(tribeZero, false, sizeof(tribeZero));
-    for (int dir = 0; dir < dirSize; ++dir)
-    {
-        dIdx = (dir & 1);
-
-        int move = dist[dIdx];
-        do
-        {
-            y += dy[dir];
-            x += dx[dir];
-            tribeZero[y][x] = true;
-        } while (--move);
-    }
-
-    // diagonal
-    if (dist[0] == 1 || dist[1] == 1)
-    {
-        fillDiagonal(y - 1, x);
-    }
-    else
-    {
-        dfs(y - 1, x);
-    }
-}
-
-inline int getTribeIdx(int y, int x)
-{
-    if (tribeZero[y][x])
-        return (0);
-
     int &d1 = dist[0];
     int &d2 = dist[1];
+    int y1 = startY - d2;
+    int x1 = startX - d2;
+    int y2 = startY - (d1 + d2);
+    int x2 = startX + d1 - d2;
+    int y3 = startY - d1;
+    int x3 = startX + d1;
 
-    if (y < startY - d2 && x <= startX + (d1 - d2))
-        return (1);
+    // 1번
+    {
+        for (int y = 0; y < y2; ++y)
+        {
+            for (int x = 0; x <= x2; ++x)
+            {
+                tribeIdx[y][x] = 1;
+            }
+        }
+        int minus = 1;
+        for (int y = y2; y < y1; ++y)
+        {
+            for (int x = 0; x <= x2 - minus; ++x)
+            {
+                tribeIdx[y][x] = 1;
+            }
+            ++minus;
+        }
+    }
 
-    if (y <= startY - d1 && x > startX + (d1 - d2))
-        return (2);
+    // 2번
+    {
+        for (int y = 0; y <= y2; ++y)
+        {
+            for (int x = x2 + 1; x < size; ++x)
+            {
+                tribeIdx[y][x] = 2;
+            }
+        }
+        int plus = 2;
+        for (int y = y2 + 1; y <= y3; ++y)
+        {
+            for (int x = x2 + plus; x < size; ++x)
+            {
+                tribeIdx[y][x] = 2;
+            }
+            ++plus;
+        }
+    }
 
-    if (y >= startY - d2 && x < startX)
-        return (3);
+    // 3번
+    {
+        for (int y = size - 1; y >= startY; --y)
+        {
+            for (int x = 0; x < startX; ++x)
+            {
+                tribeIdx[y][x] = 3;
+            }
+        }
+        int minus = 1;
+        for (int y = startY - 1; y >= y1; --y)
+        {
+            for (int x = 0; x < startX - minus; ++x)
+            {
+                tribeIdx[y][x] = 3;
+            }
+            ++minus;
+        }
+    }
 
-    return (4);
+    // 4번
+    {
+        for (int y = size - 1; y > startY; --y)
+        {
+            for (int x = startX; x < size; ++x)
+            {
+                tribeIdx[y][x] = 4;
+            }
+        }
+        int plus = 1;
+        for (int y = startY; y > y3; --y)
+        {
+            for (int x = startX + plus; x < size; ++x)
+            {
+                tribeIdx[y][x] = 4;
+            }
+            ++plus;
+        }
+    }
 }
 
 void    calculate(void)
 {
-    static const int tribeCnt = 5;
-    static int people[tribeCnt];
+    static const int TRIBE_CNT = 5;
+    static int people[TRIBE_CNT];
 
     memset(people, 0, sizeof(people));
     for (int y = 0; y < size; ++y)
     {
         for (int x = 0; x < size; ++x)
         {
-            people[getTribeIdx(y, x)] += map[y][x];
+            int &idx = tribeIdx[y][x];
+
+            people[idx] += map[y][x];
+            idx = 0;
         }
     }
 
     minDiff = std::min(
         minDiff,
-        *std::max_element(people, people + tribeCnt)
-            - *std::min_element(people, people + tribeCnt)
+        *std::max_element(people, people + TRIBE_CNT)
+            - *std::min_element(people, people + TRIBE_CNT)
     );
 }
 
@@ -153,7 +158,7 @@ int main()
                     if (startX - d2 < 0 || startY - (d1 + d2) < 0)
                         break ;
 
-                    makeBorder(startY, startX);
+                    makeBorder();
                     calculate();
                     ++d2;
                 }
