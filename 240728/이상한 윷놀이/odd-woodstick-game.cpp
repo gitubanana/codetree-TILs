@@ -138,16 +138,6 @@ int main()
         int num = 0;
         for (; num < horseCnt; ++num)
         {
-            // std::cout << "==== before move " << num << " ====" << '\n';
-            // for (int y = 0; y < size; ++y)
-            // {
-            //     for (int x = 0; x < size; ++x)
-            //     {
-            //         std::cout << vec[y][x].size() << ' ';
-            //     }
-            //     std::cout << '\n';
-            // }
-
             moveHorse(num);
             if (maxHeight >= HEIGHT_LIMIT)
                 break ;
