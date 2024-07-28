@@ -88,10 +88,10 @@ void    moveHorse(int num, int depth=0)
         || !(0 <= next.x && next.x < size)
         || map[next.y][next.x] == WALL)
     {
-        cur.dir ^= 1;
         if (depth == 1)
             return ;
 
+        cur.dir ^= 1;
         moveHorse(num, depth + 1);
         return ;
     }
