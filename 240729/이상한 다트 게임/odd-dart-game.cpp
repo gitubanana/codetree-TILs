@@ -61,6 +61,8 @@ void    dfs(int y, int x, int depth=0)
     {
         int nextY = y + dy[dir];
         int nextX = x + dx[dir];
+        if (nextX == -1)
+            nextX = xSize - 1;
 
         if (!(0 <= nextY && nextY < ySize)
             || !(0 <= nextX && nextX < xSize)
