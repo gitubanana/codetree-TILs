@@ -168,28 +168,10 @@ int main()
 
             (toMove.*rotateFunc)(move);
         }
-        // std::cout << "====== after rotate ======" << '\n';
-        // for (int y = 0; y < ySize; ++y)
-        // {
-        //     for (int x = 0; x < xSize; ++x)
-        //     {
-        //         std::cout << map[y][x] << ' ';
-        //     }
-        //     std::cout << '\n';
-        // }
 
         removeSameAdjacent();
     }
 
-    // std::cout << "====== circles ======" << '\n';
-    // for (int y = 0; y < ySize; ++y)
-    // {
-    //     for (int x = 0; x < xSize; ++x)
-    //     {
-    //         std::cout << map[y][x] << ' ';
-    //     }
-    //     std::cout << '\n';
-    // }
     std::cout << getSum() << '\n';
     return 0;
 }
