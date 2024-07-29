@@ -70,7 +70,7 @@ void    removeSameAdjacent(void)
 {
     static std::queue<std::pair<int, int>> q;
 
-    double numCnt = 0;
+    int numCnt = 0;
 
     for (int y = 1; y <= ySize; ++y)
     {
@@ -103,7 +103,7 @@ void    removeSameAdjacent(void)
     }
     else if (numCnt != 0)
     {
-        double avg = getSum() / numCnt;
+        int avg = getSum() / numCnt;
         for (int y = 1; y <= ySize; ++y)
         {
             for (int x = 0; x < xSize; ++x)
