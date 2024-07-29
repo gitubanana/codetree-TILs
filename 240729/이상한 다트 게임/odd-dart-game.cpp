@@ -18,7 +18,7 @@ struct t_circle
         start -= move;
         if (start < 0)
         {
-            start = arr.size() - start;
+            start = arr.size() + start;
         }
     }
 
@@ -161,10 +161,10 @@ int main()
         int mul, dir, move;
 
         std::cin >> mul >> dir >> move;
+        t_func &rotateFunc = rotate[dir];
         for (int y = mul - 1; y < ySize; y += mul)
         {
             t_circle &toMove = map[y];
-            t_func &rotateFunc = rotate[dir];
 
             (toMove.*rotateFunc)(move);
         }
