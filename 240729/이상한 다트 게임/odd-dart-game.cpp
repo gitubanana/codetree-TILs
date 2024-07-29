@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 struct t_circle
 {
@@ -8,7 +9,12 @@ struct t_circle
 
     t_circle(void) : start(0) { }
 
-    inline void    push(int num)
+    inline void fill(int size, int num=0)
+    {
+        arr.resize(size, num);
+    }
+
+    inline void push(int num)
     {
         arr.push_back(num);
     }
@@ -36,63 +42,25 @@ struct t_circle
 using t_func = void (t_circle::*)(int);
 
 const int MAX_SIZE = 50;
-const int REMOVED = -1;
+const int REMOVED = 0;
 
 int ySize, xSize;
 int maxDepth;
-t_circle map[MAX_SIZE];
+t_circle map[MAX_SIZE + 2];
 t_func rotate[] = {
     &t_circle::rotateClockWise,
     &t_circle::rotateCounterClockWise
 };
 
-void    dfs(int y, int x, int depth=0)
-{
-    static const int dy[] = {-1, 1, 0, 0};
-    static const int dx[] = {0, 0, -1, 1};
-    static const int dirSize = sizeof(dy) / sizeof(dy[0]);
-
-    int &cur = map[y][x];
-    int originNum = cur;
-
-    cur = REMOVED;
-    maxDepth = depth;
-    for (int dir = 0; dir < dirSize; ++dir)
-    {
-        int nextY = y + dy[dir];
-        int nextX = x + dx[dir];
-        if (nextX == -1)
-            nextX = xSize - 1;
-        else if (nextX == xSize)
-            nextX = 0;
-
-        if (!(0 <= nextY && nextY < ySize)
-            || !(0 <= nextX && nextX < xSize)
-            || map[nextY][nextX] != originNum)
-            continue ;
-
-        dfs(nextY, nextX, depth + 1);
-    }
-
-    if (maxDepth == 0)
-    {
-        cur = originNum;
-    }
-}
-
 int getSum(void)
 {
     int sum = 0;
 
-    for (int y = 0; y < ySize; ++y)
+    for (int y = 1; y <= ySize; ++y)
     {
         for (int x = 0; x < xSize; ++x)
         {
-            int &num = map[y][x];
-            if (num == REMOVED)
-                continue ;
-
-            sum += num;
+            sum += map[y][x];
         }
     }
     return (sum);
@@ -100,40 +68,55 @@ int getSum(void)
 
 void    removeSameAdjacent(void)
 {
-    int numCnt = 0;
-    bool removed = false;
+    static std::queue<std::pair<int, int>> q;
 
-    for (int y = 0; y < ySize; ++y)
-    {
-        for (int x = 0; x < xSize; ++x)
-        {
-            if (map[y][x] == REMOVED)
-                continue ;
+    double numCnt = 0;
 
-            maxDepth = 0;
-            dfs(y, x);
-
-            ++numCnt;
-            removed |= (maxDepth != 0);
-        }
-    }
-
-    if (removed)
-        return ;
-
-    int avg = getSum() / numCnt;
-    for (int y = 0; y < ySize; ++y)
+    for (int y = 1; y <= ySize; ++y)
     {
         for (int x = 0; x < xSize; ++x)
         {
             int &num = map[y][x];
-            if (num == REMOVED)
+            if (!num)
                 continue ;
 
-            if (num > avg)
-                --num;
-            else if (num < avg)
-                ++num;
+            ++numCnt;
+            if (num == map[y + 1][x]
+                || num == map[y - 1][x]
+                || num == map[y][(x + 1) % xSize]
+                || num == map[y][(x + xSize - 1) % xSize])
+            {
+                q.push({y, x});
+            }
+        }
+    }
+
+    if (q.size())
+    {
+        while (q.size())
+        {
+            auto [y, x] = q.front();
+            q.pop();
+
+            map[y][x] = REMOVED;
+        }
+    }
+    else if (numCnt != 0)
+    {
+        double avg = getSum() / numCnt;
+        for (int y = 1; y <= ySize; ++y)
+        {
+            for (int x = 0; x < xSize; ++x)
+            {
+                int &num = map[y][x];
+                if (!num)
+                    continue ;
+
+                if (num > avg)
+                    --num;
+                else if (num < avg)
+                    ++num;
+            }
         }
     }
 }
@@ -145,7 +128,9 @@ int main()
     int cmdCnt;
 
     std::cin >> ySize >> xSize >> cmdCnt;
-    for (int y = 0; y < ySize; ++y)
+    map[0].fill(xSize);
+    map[ySize + 1].fill(xSize);
+    for (int y = 1; y <= ySize; ++y)
     {
         for (int x = 0; x < xSize; ++x)
         {
@@ -162,7 +147,7 @@ int main()
 
         std::cin >> mul >> dir >> move;
         t_func &rotateFunc = rotate[dir];
-        for (int y = mul - 1; y < ySize; y += mul)
+        for (int y = mul; y <= ySize; y += mul)
         {
             t_circle &toMove = map[y];
 
