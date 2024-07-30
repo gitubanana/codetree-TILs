@@ -35,6 +35,7 @@ struct t_board
     }
 };
 
+t_board board;
 
 int main(void)
 {
@@ -45,11 +46,14 @@ int main(void)
 
     int ans = 0;
     t_life life(walkSize);
-    t_board board;
 
     while (isOk > 0)
     {
-        start = (start + 1) % walkSize;
+        if (start == 0)
+            start = walkSize - 1;
+        else
+            --start;
+
         board[size - 1] = false;
         for (int cur = size - 2; cur >= 0; --cur)
         {
