@@ -51,7 +51,7 @@ int main(void)
     {
         start = (start + 1) % walkSize;
         board[size - 1] = false;
-        for (int cur = size - 2; cur >= 1; --cur)
+        for (int cur = size - 2; cur >= 0; --cur)
         {
             int next = cur + 1;
             if (board[next] || life[next] == 0)
