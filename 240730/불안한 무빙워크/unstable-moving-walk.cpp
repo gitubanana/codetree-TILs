@@ -49,24 +49,43 @@ int main(void)
 
     while (isOk > 0)
     {
+        if (board[size - 1])
+        {
+            board[size - 1] = false;
+        }
+
         if (start == 0)
             start = walkSize - 1;
         else
             --start;
 
+        // std::cout << "----------------------" << '\n';
+        // std::cout << "==== life ====" << '\n';
+        // for (int i = 0; i < size; ++i)
+        // {
+        //     std::cout << life[i] << ' ';
+        // }
+        // std::cout << '\n';
+        // std::cout << "==== board ====" << '\n';
+        // for (int i = 0; i < size; ++i)
+        // {
+        //     std::cout << board[i] << ' ';
+        // }
+        // std::cout << '\n';
+
         board[size - 1] = false;
         for (int cur = size - 2; cur >= 0; --cur)
         {
-            if (!board[cur])
-                continue ;
- 
-            int next = cur + 1;
-            if (board[next] || life[next] == 0)
-                continue ;
+            if (board[cur])
+            {
+                int next = cur + 1;
+                if (board[next] || life[next] == 0)
+                    continue ;
 
-            board[cur] = false;
-            board[next] = true;
-            isOk -= (--life[next] == 0);
+                board[cur] = false;
+                board[next] = true;
+                isOk -= (--life[next] == 0);
+            } 
         }
 
         if (!board[0] && life[0])
