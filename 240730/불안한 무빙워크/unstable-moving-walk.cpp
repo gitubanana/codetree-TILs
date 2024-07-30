@@ -53,6 +53,9 @@ int main(void)
         board[size - 1] = false;
         for (int cur = size - 2; cur >= 0; --cur)
         {
+            if (!board[cur])
+                continue ;
+ 
             int next = cur + 1;
             if (board[next] || life[next] == 0)
                 continue ;
