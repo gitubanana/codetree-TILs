@@ -1,13 +1,20 @@
 #include <iostream>
+#include <vector>
+#include <memory>
 
 struct t_space
 {
+    static std::vector<std::shared_ptr<t_space>> allObjects;
+
     int num;
     t_space *next;
     t_space *nextFromStart;
 
     t_space(int num, t_space *next, t_space *nextFromStart)
-        : num(num), next(next), nextFromStart(nextFromStart) { }
+        : num(num), next(next), nextFromStart(nextFromStart)
+    {
+        allObjects.emplace_back(this);
+    }
 };
 
 const int HORSE_CNT = 4;
@@ -17,6 +24,7 @@ t_space *end;
 int ans;
 int move[DEPTH_LIMIT];
 t_space *horse[HORSE_CNT];
+std::vector<std::shared_ptr<t_space>> t_space::allObjects;
 
 void    buildMap(void)
 {
@@ -85,7 +93,7 @@ t_space *moveHorse(t_space *cur, int moveCnt)
     return (cur);
 }
 
-inline bool isTheSame(t_space *cmp, int num)
+bool isTheSame(t_space *cmp, int num)
 {
     if (cmp == end)
         return (false);
