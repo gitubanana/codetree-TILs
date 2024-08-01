@@ -42,31 +42,6 @@ int getTotalMass(void)
     return (totalMass);
 }
 
-inline void adjust(int &pos)
-{
-    if (pos == -1)
-    {
-        pos = size - 1;
-    }
-    else if (pos == size)
-    {
-        pos = 0;
-    }
-}
-
-inline void move(t_pos &cur, t_atom &atom)
-{
-    int move = atom.speed;
-
-    while (move--)
-    {
-        cur.y += dy[atom.dir];
-        cur.x += dx[atom.dir];
-        adjust(cur.y);
-        adjust(cur.x);
-    }
-}
-
 void    moveAll(void)
 {
     for (int y = 0; y < size; ++y)
@@ -77,9 +52,10 @@ void    moveAll(void)
 
             for (t_atom &atom : curSpace)
             {
-                t_pos next = {y, x};
-                move(next, atom);
-
+                t_pos next = {
+                    (y + dy[atom.dir] * (atom.speed % size) + size) % size,
+                    (x + dx[atom.dir] * (atom.speed % size) + size) % size
+                };
                 std::vector<t_atom> &nextSpace = NEXTMAP[next.y][next.x];
 
                 nextSpace.push_back(atom);
