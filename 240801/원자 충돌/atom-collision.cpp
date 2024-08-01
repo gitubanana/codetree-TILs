@@ -83,7 +83,7 @@ void    moveAll(void)
                 std::vector<t_atom> &nextSpace = NEXTMAP[next.y][next.x];
 
                 nextSpace.push_back(atom);
-                if (nextSpace.size() >= 2)
+                if (nextSpace.size() == 2)
                 {
                     toCompose.push_back(next);
                 }
@@ -122,7 +122,7 @@ void    composeAll(void)
         if (massSum == 0)
             continue ;
 
-        for (int dir = (isOdd ^ isEven); dir < dirSize; dir += 2)
+        for (int dir = !(isOdd ^ isEven); dir < dirSize; dir += 2)
         {
             nextSpace.push_back({massSum, speedSum, dir});
         }
