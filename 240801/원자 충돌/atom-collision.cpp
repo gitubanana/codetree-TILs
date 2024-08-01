@@ -116,7 +116,6 @@ void    composeAll(void)
 
         massSum /= 5;
         speedSum /= nextSpace.size();
-        speedSum %= size;
         nextSpace.clear();
 
         if (massSum == 0)
@@ -141,13 +140,12 @@ int main(void)
         int y, x, mass, speed, dir;
     
         std::cin >> y >> x >> mass >> speed >> dir;
-        CURMAP[y - 1][x - 1].push_back({mass, speed % size, dir});
+        CURMAP[y - 1][x - 1].push_back({mass, speed, dir});
     }
 
     while (move--)
     {
         nextIdx = curIdx ^ 1;
-
         toCompose.clear();
         moveAll();
         composeAll();
