@@ -83,7 +83,7 @@ void    moveAll(void)
                 std::vector<t_atom> &nextSpace = NEXTMAP[next.y][next.x];
 
                 nextSpace.push_back(atom);
-                if (nextSpace.size() == 2)
+                if (nextSpace.size() >= 2)
                 {
                     toCompose.push_back(next);
                 }
