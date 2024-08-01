@@ -83,7 +83,7 @@ void    moveAll(void)
                 std::vector<t_atom> &nextSpace = NEXTMAP[next.y][next.x];
 
                 nextSpace.push_back(atom);
-                if (nextSpace.size() >= 2)
+                if (nextSpace.size() == 2)
                 {
                     toCompose.push_back(next);
                 }
@@ -116,6 +116,7 @@ void    composeAll(void)
 
         massSum /= 5;
         speedSum /= nextSpace.size();
+        speedSum %= size;
         nextSpace.clear();
 
         if (massSum == 0)
@@ -140,7 +141,7 @@ int main(void)
         int y, x, mass, speed, dir;
     
         std::cin >> y >> x >> mass >> speed >> dir;
-        CURMAP[y - 1][x - 1].push_back({mass, speed, dir});
+        CURMAP[y - 1][x - 1].push_back({mass, speed % size, dir});
     }
 
     while (move--)
