@@ -51,17 +51,15 @@ void    moveThief(int map[SIZE][SIZE],
                 t_pos &next = thieves[nextSpace];
 
                 next.y = cur.y, next.x = cur.x;
-                cur.y = nextY, cur.x = nextX;
             }
 
+            cur.y = nextY, cur.x = nextX;
             std::swap(curSpace, nextSpace);
-            return ;
+            break ;
         }
 
         cur.dir = (cur.dir + 1) % dirSize;
     }
-
-    cur.dir = (cur.dir + 1) % dirSize;
 }
 
 void    backTracking(int map[SIZE][SIZE],
@@ -80,8 +78,7 @@ void    backTracking(int map[SIZE][SIZE],
     // move Tagger
     t_pos next = {
         cur.y + dy[cur.dir],
-        cur.x + dx[cur.dir],
-        cur.dir
+        cur.x + dx[cur.dir]
     };
 
     map[cur.y][cur.x] = EMPTY;
@@ -96,11 +93,12 @@ void    backTracking(int map[SIZE][SIZE],
             memcpy(nextMap, map, sizeof(nextMap));
             memcpy(nextThieves, thieves, sizeof(nextThieves));
 
-            t_pos &got = thieves[gotNum];
-            int plus = nextMap[got.y][got.x];
+            t_pos &got = nextThieves[gotNum];
+            int &nextSpace = nextMap[next.y][next.x];
+            int plus = nextSpace;
 
             next.dir = got.dir;
-            nextMap[got.y][got.x] = TAGGER;
+            nextSpace = TAGGER;
             backTracking(nextMap, nextThieves, next, curScore + plus);
         }
 
@@ -128,11 +126,12 @@ int main(void)
         }
     }
 
-    t_pos cur = {0, 0, thieves[map[0][0]].dir};
-    int curSpace = map[cur.y][cur.x];
+    int &curSpace = map[0][0];
+    t_pos cur = {0, 0, thieves[curSpace].dir};
+    int firstScore = curSpace;
 
-    map[cur.y][cur.x] = TAGGER;
-    backTracking(map, thieves, cur, curSpace);
+    curSpace = TAGGER;
+    backTracking(map, thieves, cur, firstScore);
 
     std::cout << maxScore << '\n';
     return 0;
