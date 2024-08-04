@@ -55,11 +55,13 @@ void    moveThief(int map[SIZE][SIZE],
             }
 
             std::swap(curSpace, nextSpace);
-            break ;
+            return ;
         }
 
         cur.dir = (cur.dir + 1) % dirSize;
     }
+
+    cur.dir = (cur.dir + 1) % dirSize;
 }
 
 void    backTracking(int map[SIZE][SIZE],
@@ -131,6 +133,7 @@ int main(void)
 
     map[cur.y][cur.x] = TAGGER;
     backTracking(map, thieves, cur, curSpace);
+
     std::cout << maxScore << '\n';
     return 0;
 }
