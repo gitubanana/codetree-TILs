@@ -154,16 +154,18 @@ int main()
             movePlayer(i);
         }
 
+        if (remainCnt == 1)
+            break ;
+
         for (int i = 1; i <= playerCnt; ++i)
         {
             t_pos &cur = players[i];
+            if (cur.gatcha)
+                continue ;
 
             contract[cur.y][cur.x] = curTime;
             owner[cur.y][cur.x] = i;
         }
-
-        if (remainCnt == 1)
-            break ;
 
         ++curTime;
     }
