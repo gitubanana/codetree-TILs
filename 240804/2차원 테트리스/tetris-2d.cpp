@@ -97,8 +97,9 @@ struct t_map
             if (!completed)
                 continue ;
 
-            ++score;
             removeRow(y);
+            ++score;
+            ++y;
         }
 
         int removeCnt = 0;
