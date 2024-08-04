@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include <vector>
 
 enum e_space
@@ -30,7 +31,7 @@ int contract[MAX_SIZE][MAX_SIZE];
 
 inline bool belongsToSomeone(int signTime)
 {
-    if (signTime == 0)
+    if (signTime == -1)
         return (false);
 
     return (curTime - signTime < contractTerm);
@@ -110,11 +111,12 @@ int main()
             int &space = map[y][x];
 
             std::cin >> space;
+            contract[y][x] = -1;
             if (space != EMPTY)
             {
                 players[space].y = y;
                 players[space].x = x;
-                contract[y][x] = 1;
+                contract[y][x] = 0;
                 owner[y][x] = space;
             }
         }
