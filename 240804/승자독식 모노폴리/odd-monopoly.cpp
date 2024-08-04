@@ -34,7 +34,7 @@ inline bool belongsToSomeone(int signTime)
     if (signTime == -1)
         return (false);
 
-    return (curTime - signTime < contractTerm);
+    return (curTime - signTime <= contractTerm);
 }
 
 void    findNextPos(int num, t_pos &cur)
