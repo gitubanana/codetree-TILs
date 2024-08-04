@@ -1,175 +1,163 @@
 #include <iostream>
-#include <cstring>
-#include <vector>
 
 enum e_space
 {
     EMPTY = 0
 };
 
-struct t_pos
+struct t_scent
 {
-    std::vector<int> dirs[5];
-    int y, x;
-    int dir;
-    bool gatcha;
+    int from;
+    int created;
 };
 
-const int MAX_SIZE = 20;
-const int MAX_PLAYER = MAX_SIZE * MAX_SIZE + 1;
-const int MAX_TURN = 1000;
+struct t_shark
+{
+    int dir;
+    int y, x;
+    int priority[5][4];
+    bool isOut;
+};
+
+const int MAX = 20;
 const int dy[] = {0, -1, 1, 0, 0};
 const int dx[] = {0, 0, 0, -1, 1};
-const int dirSize = sizeof(dy) / sizeof(dy[0]);
+const int dirSize = sizeof(dy) / sizeof(dy[0]) - 1;
 
-int size, playerCnt, remainCnt;
-int curTime, contractTerm;
-t_pos players[MAX_PLAYER];
-int map[MAX_SIZE][MAX_SIZE];
-int owner[MAX_SIZE][MAX_SIZE];
-int contract[MAX_SIZE][MAX_SIZE];
+int time_;
+int mapSize;
+int sharkCnt;
+int scentTime;
+int remainingShark;
+int spaceMap[MAX][MAX];
+t_scent scentMap[MAX][MAX];
+t_shark sharkArr[MAX * MAX + 1];
 
-inline bool belongsToSomeone(int signTime)
+void    sprayScent(void)
 {
-    if (signTime == -1)
-        return (false);
-
-    return (curTime - signTime <= contractTerm);
-}
-
-void    findNextPos(int num, t_pos &cur)
-{
-    int y = -1, x = -1;
-    int nextDir;
-
-    for (const int &dir : cur.dirs[cur.dir])
+    for (int num = 1; num <= sharkCnt; ++num)
     {
-        int nextY = cur.y + dy[dir];
-        int nextX = cur.x + dx[dir];
+        t_shark &cur = sharkArr[num];
 
-        if (!(0 <= nextY && nextY < size)
-            || !(0 <= nextX && nextX < size))
+        if (cur.isOut)
             continue ;
 
-        if (belongsToSomeone(contract[nextY][nextX]))
+        scentMap[cur.y][cur.x].from = num;
+        scentMap[cur.y][cur.x].created = time_;
+    }
+}
+
+inline bool isEmpty(int y, int x)
+{
+    t_scent &toCheck = scentMap[y][x];
+
+    if (toCheck.from == 0)
+        return (true);
+    return (time_ - toCheck.created >= scentTime);
+}
+
+inline void moveByPriority(t_shark &toMove, int num)
+{
+    int myScentY = -1, myScentX;
+    int myScentDir;
+
+    for (int i = 0; i < dirSize; ++i)
+    {
+        int &moveDir = toMove.priority[toMove.dir][i];
+        int nextY = toMove.y + dy[moveDir];
+        int nextX = toMove.x + dx[moveDir];
+
+        if (!(0 <= nextY && nextY < mapSize)
+            || !(0 <= nextX && nextX < mapSize))
+            continue ;
+
+        if (isEmpty(nextY, nextX))
         {
-            if (owner[nextY][nextX] == num
-                && y == -1)
-            {
-                y = nextY;
-                x = nextX;
-                nextDir = dir;
-            }
+            toMove.y = nextY;
+            toMove.x = nextX;
+            toMove.dir = moveDir;
+            return ;
+        }
+        else if (scentMap[nextY][nextX].from == num && myScentY == -1)
+        {
+            myScentY = nextY;
+            myScentX = nextX;
+            myScentDir = moveDir;
+        }
+    }
+   
+    toMove.y = myScentY;
+    toMove.x = myScentX;
+    toMove.dir = myScentDir;
+}
+
+void    moveSharks(void)
+{
+    for (int num = 1; num <= sharkCnt; ++num)
+    {
+        t_shark &cur = sharkArr[num];
+
+        if (cur.isOut)
+            continue ;
+
+        spaceMap[cur.y][cur.x] = EMPTY;
+        moveByPriority(cur, num);
+
+        int &nextSpace = spaceMap[cur.y][cur.x];
+        if (nextSpace == EMPTY)
+        {
+            nextSpace = num;
         }
         else
         {
-            y = nextY;
-            x = nextX;
-            nextDir = dir;
-            break ;
+            cur.isOut = true;
+            --remainingShark;
         }
     }
-
-    cur.y = y;
-    cur.x = x;
-    cur.dir = nextDir;
 }
 
-void    movePlayer(int num)
-{
-    t_pos &cur = players[num];
-    int &curSpace = map[cur.y][cur.x];
-
-    if (curSpace == num)
-    {
-        curSpace = EMPTY;
-    }
-
-    findNextPos(num, cur);
-
-    int &nextSpace = map[cur.y][cur.x];
-    if (nextSpace == EMPTY || nextSpace > num)
-    {
-        nextSpace = num;
-    }
-    else
-    {
-        players[num].gatcha = true;
-        --remainCnt;
-    }
-}
-
-int main()
+int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
 
-    std::cin >> size >> playerCnt >> contractTerm;
-    for (int y = 0; y < size; ++y)
+    std::cin >> mapSize >> sharkCnt >> scentTime;
+    for (int y = 0; y < mapSize; ++y)
     {
-        for (int x = 0; x < size; ++x)
+        for (int x = 0; x < mapSize; ++x)
         {
-            int &space = map[y][x];
+            int &curSpace = spaceMap[y][x];
 
-            std::cin >> space;
-            contract[y][x] = -1;
-            if (space != EMPTY)
+            std::cin >> curSpace;
+            if (curSpace != EMPTY)
             {
-                players[space].y = y;
-                players[space].x = x;
-                contract[y][x] = 0;
-                owner[y][x] = space;
+                sharkArr[curSpace].y = y;
+                sharkArr[curSpace].x = x;
+            }
+        }
+    }
+    for (int num = 1; num <= sharkCnt; ++num)
+    {
+        std::cin >> sharkArr[num].dir;
+    }
+    for (int num = 1; num <= sharkCnt; ++num)
+    {
+        for (int from = 1; from <= dirSize; ++from)
+        {
+            for (int to = 0; to < dirSize; ++to)
+            {
+                std::cin >> sharkArr[num].priority[from][to];
             }
         }
     }
 
-    for (int i = 1; i <= playerCnt; ++i)
+    remainingShark = sharkCnt;
+    while (remainingShark > 1 && time_ < 1000)
     {
-        std::cin >> players[i].dir;
+        sprayScent();
+        moveSharks();
+        ++time_;
     }
 
-    for (int i = 1; i <= playerCnt; ++i)
-    {
-        t_pos &cur = players[i];
-        for (int y = 1; y < dirSize; ++y)
-        {
-            for (int x = 1; x < dirSize; ++x)
-            {
-                int dir;
-
-                std::cin >> dir;
-                cur.dirs[y].push_back(dir);
-            }
-        }
-    }
-
-    curTime = 1;
-    remainCnt = playerCnt;
-    while (curTime <= MAX_TURN)
-    {
-        for (int i = 1; i <= playerCnt; ++i)
-        {
-            if (players[i].gatcha)
-                continue ;
-
-            movePlayer(i);
-        }
-
-        if (remainCnt == 1)
-            break ;
-
-        for (int i = 1; i <= playerCnt; ++i)
-        {
-            t_pos &cur = players[i];
-            if (cur.gatcha)
-                continue ;
-
-            contract[cur.y][cur.x] = curTime;
-            owner[cur.y][cur.x] = i;
-        }
-
-        ++curTime;
-    }
-
-    std::cout << (curTime > MAX_TURN ? -1 : curTime) << '\n';
-    return 0;
+    std::cout << (remainingShark > 1 && time_ == 1000 ? -1 : time_) << '\n';
+    return (0);
 }
