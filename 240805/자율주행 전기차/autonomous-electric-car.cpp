@@ -120,6 +120,13 @@ int findClosestCustomer(void)
 
 bool goToDestination(int customerId)
 {
+    int &curDestination = destination[car.y][car.x];
+    if (curDestination != EMPTY)
+    {
+        curDestination = EMPTY;
+        return (true);
+    }
+
     std::queue<t_pos> q;
 
     memset(visited, false, sizeof(visited));
@@ -195,35 +202,12 @@ int main()
     {
         moved = 0;
 
-        // std::cout << "-----------------------------" << '\n';
-        // std::cout << "=== before customer ===" << '\n';
-        // std::cout << "car : " << car.y << ", " << car.x << '\n';
-        // for (int y = 0; y < size; ++y)
-        // {
-        //     for (int x = 0; x < size; ++x)
-        //     {
-        //         std::cout << customer[y][x] << ' ';
-        //     }
-        //     std::cout << '\n';
-        // }
-
         int id = findClosestCustomer();
-        // std::cout << "closest id : " << id << '\n';
-        // std::cout << "=== dest ===" << '\n';
-        // for (int y = 0; y < size; ++y)
-        // {
-        //     for (int x = 0; x < size; ++x)
-        //     {
-        //         std::cout << destination[y][x] << ' ';
-        //     }
-        //     std::cout << '\n';
-        // }
         if (id == EMPTY || !goToDestination(id))
         {
             break ;
         }
 
-        // std::cout << "moved : " << moved << '\n';
         battery += moved * 2;
     }
 
