@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unordered_set>
 #include <climits>
 #include <cstring>
 #include <queue>
@@ -23,6 +24,8 @@ struct t_pos
     }
 };
 
+using t_uset = std::unordered_set<int>;
+
 const int MAX_SIZE = 20;
 const int dy[] = {-1, 1, 0, 0};
 const int dx[] = {0, 0, -1, 1};
@@ -34,8 +37,8 @@ int moved;
 int battery;
 bool isWall[MAX_SIZE][MAX_SIZE];
 bool visited[MAX_SIZE][MAX_SIZE];
-int destination[MAX_SIZE][MAX_SIZE];
 int customer[MAX_SIZE][MAX_SIZE];
+t_uset destination[MAX_SIZE][MAX_SIZE];
 
 inline bool isBound(const t_pos &pos)
 {
@@ -120,10 +123,10 @@ int findClosestCustomer(void)
 
 bool goToDestination(int customerId)
 {
-    int &curDestination = destination[car.y][car.x];
-    if (curDestination == customerId)
+    t_uset &curDest = destination[car.y][car.x];
+    if (curDest.find(customerId) != curDest.end())
     {
-        curDestination = EMPTY;
+        curDest.erase(customerId);
         return (true);
     }
 
@@ -157,11 +160,11 @@ bool goToDestination(int customerId)
 
                 visited[next.y][next.x] = true;
 
-                int &nextDest = destination[next.y][next.x];
-                if (nextDest == customerId)
+                t_uset &nextDest = destination[next.y][next.x];
+                if (nextDest.find(customerId) != nextDest.end())
                 {
                     car = next;
-                    nextDest = EMPTY;
+                    nextDest.erase(customerId);
                     return (true);
                 }
 
@@ -195,7 +198,7 @@ int main()
 
         std::cin >> start >> end;
         customer[start.y][start.x] = id;
-        destination[end.y][end.x] = id;
+        destination[end.y][end.x].insert(id);
     }
 
     while (customerCnt--)
