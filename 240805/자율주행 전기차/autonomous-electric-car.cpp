@@ -121,7 +121,7 @@ int findClosestCustomer(void)
 bool goToDestination(int customerId)
 {
     int &curDestination = destination[car.y][car.x];
-    if (curDestination != EMPTY)
+    if (curDestination == customerId)
     {
         curDestination = EMPTY;
         return (true);
