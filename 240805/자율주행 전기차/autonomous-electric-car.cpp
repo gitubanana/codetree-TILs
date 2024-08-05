@@ -123,13 +123,6 @@ int findClosestCustomer(void)
 
 bool goToDestination(int customerId)
 {
-    t_uset &curDest = destination[car.y][car.x];
-    if (curDest.find(customerId) != curDest.end())
-    {
-        curDest.erase(customerId);
-        return (true);
-    }
-
     std::queue<t_pos> q;
 
     memset(visited, false, sizeof(visited));
