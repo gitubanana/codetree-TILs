@@ -68,16 +68,6 @@ void    rotateAll(int level)
         }
     }
     curIdx = nextIdx;
-
-    // std::cout << "==== after rotate ====" << '\n';
-    // for (int y = 0; y < size; ++y)
-    // {
-    //     for (int x = 0; x < size; ++x)
-    //     {
-    //         std::cout << CURMAP[y][x] << ' ';
-    //     }
-    //     std::cout << '\n';
-    // }
 }
 
 inline bool isBound(int y, int x)
@@ -159,26 +149,7 @@ int main(void)
         std::cin >> level;
         rotateAll(level);
         meltIce();
-        // std::cout << "==== after melt ice ====" << '\n';
-        // for (int y = 0; y < size; ++y)
-        // {
-        //     for (int x = 0; x < size; ++x)
-        //     {
-        //         std::cout << CURMAP[y][x] << ' ';
-        //     }
-        //     std::cout << '\n';
-        // }
     }
-
-    // std::cout << "==== after all cmd ====" << '\n';
-    // for (int y = 0; y < size; ++y)
-    // {
-    //     for (int x = 0; x < size; ++x)
-    //     {
-    //         std::cout << CURMAP[y][x] << ' ';
-    //     }
-    //     std::cout << '\n';
-    // }
 
     int cnt = 0;
     int sum = 0;
