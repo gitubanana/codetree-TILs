@@ -15,22 +15,13 @@ struct t_seat
 
     inline bool operator<(const t_seat &other) const
     {
-        if (this->likeCnt == other.likeCnt)
-        {
-            if (this->emptyCnt == other.emptyCnt)
-            {
-                if (this->y == other.y)
-                {
-                    return (this->x > other.x);
-                }
+        if (this->likeCnt != other.likeCnt)
+            return (this->likeCnt < other.likeCnt);
 
-                return (this->y > other.y);
-            }
-
+        if (this->emptyCnt != other.emptyCnt)
             return (this->emptyCnt < other.emptyCnt);
-        }
 
-        return (this->likeCnt < other.likeCnt);
+        return (false);
     }
 };
 
