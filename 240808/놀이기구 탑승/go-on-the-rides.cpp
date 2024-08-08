@@ -151,16 +151,6 @@ int main()
         takeAseat(pupilNum);
     }
 
-    // std::cout << "===== after all take seats =====" << '\n';
-    // for (int y = 0; y < size; ++y)
-    // {
-    //     for (int x = 0; x < size; ++x)
-    //     {
-    //         std::cout << map[y][x] << ' ';
-    //     }
-    //     std::cout << '\n';
-    // }
-
     std::cout << getTotalScore() << '\n';
     return 0;
 }
