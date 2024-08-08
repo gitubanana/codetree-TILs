@@ -33,7 +33,7 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int size;
 int map[MAX_SIZE][MAX_SIZE];
-bool isFriend[MAX_SIZE][MAX_SIZE];
+bool isFriend[MAX_SIZE + 1][MAX_SIZE + 1];
 
 inline bool inRange(int y, int x)
 {
