@@ -25,8 +25,6 @@ struct t_seat
     }
 };
 
-using t_uset = std::unordered_set<int>;
-
 const int MAX_SIZE = 20;
 const int LIKE_CNT = 4;
 const int dy[] = {-1, 1, 0, 0};
@@ -35,7 +33,7 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int size;
 int map[MAX_SIZE][MAX_SIZE];
-t_uset likes[MAX_SIZE * MAX_SIZE + 1];
+bool isFriend[MAX_SIZE][MAX_SIZE];
 
 inline bool inRange(int y, int x)
 {
@@ -46,7 +44,6 @@ inline bool inRange(int y, int x)
 t_seat getSeatInfo(int y, int x, int pupilNum)
 {
     t_seat seat = {y, x, 0, 0};
-    t_uset &myLikes = likes[pupilNum];
 
     for (int dir = 0; dir < dirSize; ++dir)
     {
@@ -57,7 +54,7 @@ t_seat getSeatInfo(int y, int x, int pupilNum)
             continue ;
 
         int &nextSpace = map[nextY][nextX];
-        if (myLikes.find(nextSpace) != myLikes.end())
+        if (isFriend[pupilNum][nextSpace])
         {
             ++seat.likeCnt;
         }
@@ -98,7 +95,6 @@ int    getTotalScore(void)
         {
             int likeCnt = 0;
             int &curPupil = map[y][x];
-            t_uset &curLikes = likes[curPupil];
 
             for (int dir = 0; dir < dirSize; ++dir)
             {
@@ -109,7 +105,7 @@ int    getTotalScore(void)
                     continue ;
 
                 int &nextPupil = map[nextY][nextX];
-                likeCnt += (curLikes.find(nextPupil) != curLikes.end());
+                likeCnt += isFriend[curPupil][nextPupil];
             }
 
             totalScore += score[likeCnt];
@@ -135,7 +131,7 @@ int main()
             int like;
 
             std::cin >> like;
-            likes[pupilNum].insert(like);
+            isFriend[pupilNum][like] = true;
         }
         takeAseat(pupilNum);
     }
