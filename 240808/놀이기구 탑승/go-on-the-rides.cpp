@@ -89,6 +89,7 @@ void takeAseat(int pupilNum)
 
 int    getTotalScore(void)
 {
+    static const int score[] = {0, 1, 10, 100, 1000};
     int totalScore = 0;
 
     for (int y = 0; y < size; ++y)
@@ -111,10 +112,7 @@ int    getTotalScore(void)
                 likeCnt += (curLikes.find(nextPupil) != curLikes.end());
             }
 
-            if (likeCnt > 0)
-            {
-                totalScore += std::pow(10, likeCnt - 1);
-            }
+            totalScore += score[likeCnt];
         }
     }
     return (totalScore);
