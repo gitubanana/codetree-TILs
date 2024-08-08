@@ -26,6 +26,7 @@ struct t_seat
 };
 
 const int MAX_SIZE = 20;
+const int MAX_PUPIL = MAX_SIZE * MAX_SIZE + 1;
 const int LIKE_CNT = 4;
 const int dy[] = {-1, 1, 0, 0};
 const int dx[] = {0, 0, -1, 1};
@@ -33,7 +34,7 @@ const int dirSize = sizeof(dy) / sizeof(dy[0]);
 
 int size;
 int map[MAX_SIZE][MAX_SIZE];
-bool isFriend[MAX_SIZE + 1][MAX_SIZE + 1];
+bool isFriend[MAX_PUPIL][MAX_PUPIL];
 
 inline bool inRange(int y, int x)
 {
