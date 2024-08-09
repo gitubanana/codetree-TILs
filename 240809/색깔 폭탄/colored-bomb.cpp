@@ -177,7 +177,7 @@ void    workGravity(void)
                     {
                         --downY;
                     }
-                    y = downY - 1;
+                    y = downY;
                     break ;
                 default:
                     CURMAP[downY--][x] = CURMAP[y][x];
@@ -224,6 +224,7 @@ int main(void)
         turn_90degree();
         // printMap("after turn90degree");
         workGravity();
+        // printMap("after workGravity2");
         // std::cout << "******************" << '\n';
     }
 
