@@ -41,7 +41,7 @@ struct t_group
             return (this->getSize() < other.getSize());
 
         if (redPos.size() != other.redPos.size())
-            return (redPos.size() < other.redPos.size());
+            return (redPos.size() > other.redPos.size());
 
         return (cmp < other.cmp);
     }
@@ -90,6 +90,7 @@ void    dfs(const t_pos &cur, int color, t_group &g)
         int &nextSpace = CURMAP[next.y][next.x];
         if (nextSpace == color)
         {
+            g.cmp = std::max(g.cmp, next);
             g.colorPos.push_back(next);
         }
         else if (nextSpace == RED)
@@ -101,7 +102,6 @@ void    dfs(const t_pos &cur, int color, t_group &g)
             continue ;
         }
 
-        g.cmp = std::max(g.cmp, next);
         dfs(next, color, g);
     }
 }
