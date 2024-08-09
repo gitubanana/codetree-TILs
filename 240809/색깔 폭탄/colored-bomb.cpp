@@ -57,22 +57,8 @@ int curIdx, nextIdx;
 int map[2][MAX_SIZE][MAX_SIZE];
 bool visited[MAX_SIZE][MAX_SIZE];
 
-void    printMap(std::string msg)
-{
-    std::cout << "======== " << msg << " ========" << '\n';
-    for (int y = 0; y < size; ++y)
-    {
-        for (int x = 0; x < size; ++x)
-        {
-            std::cout << CURMAP[y][x] << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
 void    dfs(const t_pos &cur, int color, t_group &g)
 {
-    // std::cout << "cur : " << cur.y << ", " << cur.x << '\n';
     visited[cur.y][cur.x] = true;
 
     for (int dir = 0; dir < dirSize; ++dir)
@@ -111,7 +97,6 @@ bool removeGroup(void)
     bool removed = false;
     t_group toRemove;
 
-    // printMap("before remove");
     memset(visited, false, sizeof(visited));
     for (int y = 0; y < size; ++y)
     {
@@ -126,7 +111,6 @@ bool removeGroup(void)
                 {y, x}
             };
 
-            // std::cout << "#### dfs ####" << '\n';
             dfs({y, x}, CURMAP[y][x], cmpGroup);
             if (cmpGroup.getSize() >= 2)
             {
@@ -218,14 +202,9 @@ int main(void)
 
     while (removeGroup())
     {
-        // printMap("after remove");
         workGravity();
-        // printMap("after workGravity");
         turn_90degree();
-        // printMap("after turn90degree");
         workGravity();
-        // printMap("after workGravity2");
-        // std::cout << "******************" << '\n';
     }
 
     std::cout << score << '\n';
