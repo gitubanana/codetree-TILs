@@ -99,28 +99,6 @@ int getScore(void)
         }
     }
 
-    // std::cout << "===== groupId =====" << '\n';
-    // for (int y = 0; y < size; ++y)
-    // {
-    //     for (int x = 0; x < size; ++x)
-    //     {
-    //         std::cout << groupId[y][x] << ' ';
-    //     }
-    //     std::cout << '\n';
-    // }
-    // std::cout << "==== groupSize ====" << '\n';
-    // for (const int &curSize : groupSize)
-    // {
-    //     std::cout << curSize << ' ';
-    // }
-    // std::cout << '\n';
-    // std::cout << "==== groupNum =====" << '\n';
-    // for (int i = 0; i < id; ++i)
-    // {
-    //     std::cout << groupNum[i] << ' ';
-    // }
-    // std::cout << '\n';
-
     int score = 0;
     for (int y = 0; y < size; ++y)
     {
@@ -179,19 +157,6 @@ void    rotateCross(void)
     }
 
     curIdx = nextIdx;
-}
-
-void    printMap(std::string str)
-{
-    std::cout << "==== " << str << " ====" << '\n';
-    for (int y = 0; y < size; ++y)
-    {
-        for (int x = 0; x < size; ++x)
-        {
-            std::cout << CURMAP[y][x] << ' ';
-        }
-        std::cout << '\n';
-    }
 }
 
 void    rotateSquare(int idx)
@@ -253,9 +218,7 @@ int main(void)
     while (rotateCnt--)
     {
         rotateCross();
-        // printMap("after rotateCross");
         rotateSquares();
-        // printMap("after rotateSquares");
         totalScore += getScore();
     }
 
