@@ -32,19 +32,6 @@ inline bool inRange(const t_pos &pos)
             && (0 <= pos.x && pos.x < SIZE));
 }
 
-void    printMap(std::string str)
-{
-    std::cout << "=== " << str << " ===" << '\n';
-    for (int y = 0; y < SIZE; ++y)
-    {
-        for (int x = 0; x < SIZE; ++x)
-        {
-            std::cout << CURMAP[y][x] << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
 void    dfs(const t_pos &cur, std::vector<t_pos> &allPos)
 {
     allPos.push_back(cur);
@@ -139,10 +126,6 @@ int removeBestMap(void)
                 if (curRemove.size() < nextRemove.size()
                     || (curRemove.size() == nextRemove.size() && rotateCnt > rCnt))
                 {
-                    // std::cout << "cur : " << y << ", " << x << '\n';
-                    // std::cout << "size : " << nextRemove.size() << '\n';
-                    // printMap("after rotate90");
-
                     rotateCnt = rCnt;
                     rY = y, rX = x;
                     cur = next;
@@ -175,12 +158,6 @@ void    fillEmpty(void)
             int &curSpace = CURMAP[y][x];
             if (curSpace != EMPTY)
                 continue ;
-
-            if (relics.empty())
-            {
-                std::cout << "error" << '\n';
-                exit(0);
-            }
 
             curSpace = relics.front();
             relics.pop();
@@ -217,11 +194,9 @@ int main(void)
         if (curValue == 0)
             break ;
 
-        // printMap("after removeBestMap");
         while (true)
         {
             fillEmpty();
-            // printMap("after fillEmpty");
 
             removePos.clear();
             getMapRelics(removePos);
