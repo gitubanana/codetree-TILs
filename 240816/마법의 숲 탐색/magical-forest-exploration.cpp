@@ -138,10 +138,7 @@ void    simulation(t_golem &golem)
     isGolem[golem.y][golem.x] = true;
     for (int dir = 0; dir < dirSize; ++dir)
     {
-        int nextY = golem.y + dy[dir];
-        int nextX = golem.x + dx[dir];
-
-        isGolem[nextY][nextX] = true;
+        isGolem[golem.y + dy[dir]][golem.x + dx[dir]] = true;
     }
 
     // find the biggest row
@@ -160,7 +157,7 @@ int main(void)
     std::cin >> ySize >> xSize >> golemCnt;
     while (golemCnt--)
     {
-        t_golem golem = {-1};
+        t_golem golem = {-2};
 
         std::cin >> golem.x >> golem.exitDir;
         --golem.x;
