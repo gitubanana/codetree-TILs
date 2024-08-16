@@ -52,8 +52,10 @@ inline bool isOkWithFourDir(const t_pos &pos)
         if (next.y < 0)
             continue ;
 
-        if (!inRange(next)
-            || isGolem[next.y][next.x])
+        if (!(0 <= next.x && next.x < xSize))
+            return (false);
+
+        if (isGolem[next.y][next.x])
             return (false);
     }
     return (true);
