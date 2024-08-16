@@ -77,6 +77,7 @@ void    dfs(const t_pos &cur)
     maxRow = std::max(maxRow, cur.y);
     visited[cur.y][cur.x] = true;
 
+    // std::cout << "cur : " << cur.y << ", " << cur.x << '\n';
     int &curGolem = golemId[cur.y][cur.x];
     for (int dir = 0; dir < dirSize; ++dir)
     {
@@ -91,10 +92,18 @@ void    dfs(const t_pos &cur)
             continue ;
 
         int &nextGolem = golemId[next.y][next.x];
-        if (!(curGolem < 0 || nextGolem < 0 || curGolem == nextGolem))
-            continue ;
-
-        dfs(next);
+        if (curGolem == nextGolem)
+        {
+            dfs(next);
+        }
+        else if (curGolem == -nextGolem)
+        {
+            dfs(next);
+        }
+        else if (curGolem < 0)
+        {
+            dfs(next);
+        }
     }
 }
 
@@ -147,7 +156,11 @@ void    simulation(t_golem &pos)
     golemId[pos.y][pos.x] = id;
     for (int dir = 0; dir < dirSize; ++dir)
     {
-        golemId[pos.y + dy[dir]][pos.x + dx[dir]] = id;
+        int nextY = pos.y + dy[dir];
+        int nextX = pos.x + dx[dir];
+
+        visited[nextY][nextX] = true;
+        golemId[nextY][nextX] = id;
     }
 
     // find the biggest row
