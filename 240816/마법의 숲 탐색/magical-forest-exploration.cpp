@@ -154,7 +154,7 @@ int main(void)
     std::cin >> ySize >> xSize >> golemCnt;
     while (golemCnt--)
     {
-        t_golem golem = {-1};
+        t_golem golem = {-2};
 
         std::cin >> golem.x >> golem.exitDir;
         --golem.x;
