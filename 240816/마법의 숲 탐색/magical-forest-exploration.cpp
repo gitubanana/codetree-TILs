@@ -129,17 +129,25 @@ void    simulation(t_golem &golem)
         return ;
     }
 
+    // std::cout << "exitDir : " << golem.exitDir << '\n';
+
+    memset(visited, false, sizeof(visited));
+
     // set isGolem
+    visited[golem.y][golem.x] = true;
     isGolem[golem.y][golem.x] = true;
     for (int dir = 0; dir < dirSize; ++dir)
     {
-        isGolem[golem.y + dy[dir]][golem.x + dx[dir]] = true;
+        int nextY = golem.y + dy[dir];
+        int nextX = golem.x + dx[dir];
+
+        visited[nextY][nextX] = true;
+        isGolem[nextY][nextX] = true;
     }
+
 
     // find the biggest row
     maxRow = golem.y + 1;
-    memset(visited, false, sizeof(visited));
-    visited[golem.y][golem.x] = true;
     dfs({golem.y + dy[golem.exitDir], golem.x + dx[golem.exitDir]});
 
     rowSum += maxRow + 1;
