@@ -122,7 +122,7 @@ void    simulation(t_golem &golem)
         }
     }
 
-    if (golem.y <= 0) // out of the map
+    if (golem.y <= 0 || !isOkWithFourDir(golem)) // out of the map
     {
         // remove all
         memset(isGolem, false, sizeof(isGolem));
@@ -144,7 +144,6 @@ void    simulation(t_golem &golem)
         visited[nextY][nextX] = true;
         isGolem[nextY][nextX] = true;
     }
-
 
     // find the biggest row
     maxRow = golem.y + 1;
