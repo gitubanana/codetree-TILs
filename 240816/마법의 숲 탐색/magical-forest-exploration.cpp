@@ -21,19 +21,6 @@ int ySize, xSize;
 int golemId[MAX_SIZE][MAX_SIZE];
 bool visited[MAX_SIZE][MAX_SIZE];
 
-void    printMap(std::string str)
-{
-    std::cout << "=== " << str << " ===" << '\n';
-    for (int y = 0; y < ySize; ++y)
-    {
-        for (int x = 0; x < xSize; ++x)
-        {
-            std::cout << golemId[y][x] << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
 inline bool inRange(const t_pos &pos)
 {
     return ((0 <= pos.y && pos.y < ySize)
@@ -77,7 +64,6 @@ void    dfs(const t_pos &cur)
     maxRow = std::max(maxRow, cur.y);
     visited[cur.y][cur.x] = true;
 
-    // std::cout << "cur : " << cur.y << ", " << cur.x << '\n';
     int &curGolem = golemId[cur.y][cur.x];
     for (int dir = 0; dir < dirSize; ++dir)
     {
@@ -115,7 +101,6 @@ void    simulation(t_golem &pos)
 
     while (canGo && pos.y < yLimit)
     {
-        // std::cout << "pos : " << pos.y << ", " << pos.x << '\n';
         if (moveDown(pos))
             continue ;
 
@@ -128,7 +113,6 @@ void    simulation(t_golem &pos)
                 (pos.exitDir + 1 + (dir == dirSize - 1) * 2) % dirSize
             };
 
-            // std::cout << "next : " << next.y << ", " << next.x << '\n';
             if (isOkWithFourDir(next) && moveDown(next))
             {
                 pos = next;
@@ -145,7 +129,6 @@ void    simulation(t_golem &pos)
         return ;
     }
 
-    // std::cout << "exitDir : " << pos.exitDir << '\n';
 
     memset(visited, false, sizeof(visited));
 
@@ -186,8 +169,6 @@ int main(void)
         --pos.x;
 
         simulation(pos);
-        // printMap("after simulation");
-        // std::cout << "rowSum : " << rowSum << '\n'; 
     }
 
     std::cout << rowSum << '\n';
