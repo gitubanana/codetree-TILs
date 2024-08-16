@@ -122,7 +122,7 @@ void    simulation(t_golem &golem)
         }
     }
 
-    if (golem.y <= 0 || !isOkWithFourDir(golem)) // out of the map
+    if (golem.y <= 0) // out of the map
     {
         // remove all
         memset(isGolem, false, sizeof(isGolem));
@@ -161,7 +161,7 @@ int main(void)
     std::cin >> ySize >> xSize >> golemCnt;
     while (golemCnt--)
     {
-        t_golem golem = {-2};
+        t_golem golem = {-1};
 
         std::cin >> golem.x >> golem.exitDir;
         --golem.x;
