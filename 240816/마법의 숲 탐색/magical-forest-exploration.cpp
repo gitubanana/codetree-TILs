@@ -49,11 +49,11 @@ inline bool isOkWithFourDir(const t_pos &pos)
             pos.x + dx[dir]
         };
 
-        if (next.y < 0)
-            continue ;
-
         if (!(0 <= next.x && next.x < xSize))
             return (false);
+
+        if (next.y < 0)
+            continue ;
 
         if (isGolem[next.y][next.x])
             return (false);
