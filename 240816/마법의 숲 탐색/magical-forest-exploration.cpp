@@ -141,7 +141,6 @@ void    simulation(t_golem &golem)
         int nextY = golem.y + dy[dir];
         int nextX = golem.x + dx[dir];
 
-        visited[nextY][nextX] = true;
         isGolem[nextY][nextX] = true;
     }
 
