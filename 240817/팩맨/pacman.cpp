@@ -29,7 +29,7 @@ t_pos pacMan;
 int curTime;
 int curIdx, nextIdx;
 std::vector<t_pos> ate, cmp;
-bool visited[SIZE][SIZE];
+int visited[SIZE][SIZE];
 int deadTime[SIZE][SIZE];
 std::vector<int> map[2][SIZE][SIZE];
 
@@ -118,16 +118,21 @@ void    backTracking(const t_pos &cur, int curEat=0, int depth=0)
             cur.x + dx[dir]
         };
 
-        if (!inRange(next)
-            || visited[next.y][next.x])
+        if (!inRange(next))
             continue ;
 
-        visited[next.y][next.x] = true;
+        int &nextVisited = visited[next.y][next.x];
+
+        ++nextVisited;
         cmp.push_back(next);
 
-        backTracking(next, curEat + NEXTMAP[next.y][next.x].size(), depth + 1);
+        backTracking(
+            next,
+            curEat + NEXTMAP[next.y][next.x].size() * (nextVisited == 1),
+            depth + 1
+        );
 
-        visited[next.y][next.x] = false;
+        --nextVisited;
         cmp.pop_back();
     }
 }
@@ -137,9 +142,7 @@ void    movePacMan(void)
     maxEat = -1;
     t_pos start = pacMan;
 
-    memset(visited, false, sizeof(visited));
     backTracking(start);
-
     for (const t_pos &pos : ate)
     {
         // std::cout << "ate : " << pos.y << ", " << pos.x << '\n';
@@ -147,8 +150,8 @@ void    movePacMan(void)
         if (NEXTMAP[pos.y][pos.x].size())
         {
             deadTime[pos.y][pos.x] = curTime;
+            NEXTMAP[pos.y][pos.x].clear();
         }
-        NEXTMAP[pos.y][pos.x].clear();
     }
 }
 
@@ -162,6 +165,7 @@ void    duplicateMonsters(void)
             {
                 NEXTMAP[y][x].push_back(dir);
             }
+
             CURMAP[y][x].clear();
         }
     }
@@ -223,12 +227,12 @@ int main(void)
         CURMAP[pos.y][pos.x].push_back(dir - 1);
     }
 
+    // printMap("first move Monsters curMap");
     while (turn--)
     {
         ++curTime;
         nextIdx = curIdx ^ 1;
 
-        // printMap("before move Monsters curMap");
         moveMonsters();
         // printNextMap("after move Monsters NextMap");
 
