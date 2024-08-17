@@ -145,8 +145,6 @@ void    movePacMan(void)
     backTracking(start);
     for (const t_pos &pos : ate)
     {
-        // std::cout << "ate : " << pos.y << ", " << pos.x << '\n';
-
         if (NEXTMAP[pos.y][pos.x].size())
         {
             deadTime[pos.y][pos.x] = curTime;
@@ -185,32 +183,6 @@ int getMonsterCnt(void)
     return (cnt);
 }
 
-void    printMap(std::string str)
-{
-    std::cout << "=== " << str << " ===" << '\n';
-    for (int y = 0; y < SIZE; ++y)
-    {
-        for (int x = 0; x < SIZE; ++x)
-        {
-            std::cout << CURMAP[y][x].size() << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
-void    printNextMap(std::string str)
-{
-    std::cout << "=== " << str << " ===" << '\n';
-    for (int y = 0; y < SIZE; ++y)
-    {
-        for (int x = 0; x < SIZE; ++x)
-        {
-            std::cout << NEXTMAP[y][x].size() << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
 int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
@@ -227,21 +199,14 @@ int main(void)
         CURMAP[pos.y][pos.x].push_back(dir - 1);
     }
 
-    // printMap("first move Monsters curMap");
     while (turn--)
     {
         ++curTime;
         nextIdx = curIdx ^ 1;
 
         moveMonsters();
-        // printNextMap("after move Monsters NextMap");
-
-        // std::cout << "pacMan : " << pacMan.y << ", " << pacMan.x << '\n';
         movePacMan();
-        // printNextMap("after move PacMan NextMap");
-
         duplicateMonsters();
-        // printNextMap("after duplicate NextMap");
 
         curIdx = nextIdx;
     }
