@@ -142,8 +142,13 @@ void    movePacMan(void)
 
     for (const t_pos &pos : ate)
     {
+        // std::cout << "ate : " << pos.y << ", " << pos.x << '\n';
+
+        if (NEXTMAP[pos.y][pos.x].size())
+        {
+            deadTime[pos.y][pos.x] = curTime;
+        }
         NEXTMAP[pos.y][pos.x].clear();
-        deadTime[pos.y][pos.x] = curTime;
     }
 }
 
@@ -227,6 +232,7 @@ int main(void)
         moveMonsters();
         // printNextMap("after move Monsters NextMap");
 
+        // std::cout << "pacMan : " << pacMan.y << ", " << pacMan.x << '\n';
         movePacMan();
         // printNextMap("after move PacMan NextMap");
 
