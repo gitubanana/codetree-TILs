@@ -36,19 +36,6 @@ int map[2][MAX_SIZE][MAX_SIZE];
 int cnt[2][MAX_SIZE][MAX_SIZE];
 t_pos exitPos;
 
-void    printMap(std::string str, int map[MAX_SIZE][MAX_SIZE])
-{
-    std::cout << "==== " << str << " ====" << '\n';
-    for (int y = 0; y < size; ++y)
-    {
-        for (int x = 0; x < size; ++x)
-        {
-            std::cout << map[y][x] << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
 inline std::istream &operator>>(std::istream &cin, t_pos &pos)
 {
     cin >> pos.y >> pos.x;
@@ -171,12 +158,6 @@ void    rotateMinSquare(void)
     int rightDownY = leftUpY + squareSize;
     int rightDownX = leftUpX + squareSize;
 
-    // std::cout << "squareSize : " << squareSize << '\n';
-    // std::cout << "leftUpY : " << leftUpY << '\n';
-    // std::cout << "leftUpX : " << leftUpX << '\n';
-    // std::cout << "rightDownY : " << rightDownY << '\n';
-    // std::cout << "rightDownX : " << rightDownX << '\n';
-
     memcpy(CURCNT, NEXTCNT, sizeof(CURCNT));
     memcpy(NEXTMAP, CURMAP, sizeof(NEXTMAP));
     for (int y = 0; y <= squareSize; ++y)
@@ -232,14 +213,10 @@ int main()
         nextIdx = curIdx ^ 1;
 
         movePlayers();
-        // printMap("after move Players NextCnt", NEXTCNT);
-        // std::cout << "playerCnt : " << playerCnt << '\n';
         if (playerCnt == 0)
             break ;
 
         rotateMinSquare();
-        // printMap("after rotate MinSqaure NextMap", NEXTMAP);
-        // printMap("after rotate MinSqaure NEXTCNT", NEXTCNT);
 
         curIdx = nextIdx;
     }
