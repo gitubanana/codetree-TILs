@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
 
 struct t_knight;
 
@@ -52,6 +53,13 @@ struct t_knight : public t_pos
     }
 };
 
+struct t_move
+{
+    int id;
+    int damage;
+};
+
+std::vector<t_move> toMove;
 t_knight knights[MAX_KNIGHT + 1];
 
 inline std::istream &operator>>(std::istream &cin, t_knight &input)
@@ -105,14 +113,7 @@ bool    dfs(t_knight &cur, int dir, int depth=0)
         }
     }
 
-    cur.damaged += damage * (depth != 0);
-    cur.setValue(EMPTY);
-    if (!cur.isDead())
-    {
-        cur.y = next.y, cur.x = next.x;
-        cur.setValue(cur.id);
-    }
-
+    toMove.push_back({cur.id, damage * (depth != 0)});
     return (true);
 }
 
@@ -178,8 +179,23 @@ int main(void)
         if (cur.isDead())
             continue ;
 
+        toMove.clear();
         memset(visited, false, sizeof(visited));
-        dfs(cur, dir);
+        if (!dfs(cur, dir))
+            continue ;
+
+        for (const t_move &move : toMove)
+        {
+            t_knight &cur = knights[move.id];
+
+            cur.damaged += move.damage;
+            cur.setValue(EMPTY);
+            if (cur.isDead())
+                continue ;
+
+            cur.y += dy[dir], cur.x += dx[dir];
+            cur.setValue(cur.id);
+        }
         // printId("after dfs");
     }
 
