@@ -87,19 +87,16 @@ bool    dfs(t_knight &cur, int dir, int depth=0)
         next.x + cur.width
     };
 
-    // std::cout << "==== id : " << cur.id << " ====" << '\n';
     visited[cur.id] = true;
     for (int y = next.y; y < end.y; ++y)
     {
         for (int x = next.x; x < end.x; ++x)
         {
-            // std::cout << "cur : " << y << ", " << x << '\n';
             if (!inRange(y, x) || map[y][x] == WALL)
                 return (false);
 
             int &nextId = knightID[y][x];
 
-            // std::cout << "nextId : " << nextId << '\n';
             if (map[y][x] == TRAP)
             {
                 ++damage;
@@ -132,19 +129,6 @@ int getAliveTotalDamaged(void)
     return (totalDamaged);
 }
 
-void    printId(std::string str)
-{
-    std::cout << "=== " << str << " ===" << '\n';
-    for (int y = 0; y < size; ++y)
-    {
-        for (int x = 0; x < size; ++x)
-        {
-            std::cout << knightID[y][x] << ' ';
-        }
-        std::cout << '\n';
-    }
-}
-
 int main(void)
 {
     std::cin.tie(0)->sync_with_stdio(0);
@@ -169,7 +153,6 @@ int main(void)
         cur.setValue(cur.id);
     }
 
-    // printId("init id");
     while (cmdCnt--)
     {
         int id, dir;
@@ -196,7 +179,6 @@ int main(void)
             cur.y += dy[dir], cur.x += dx[dir];
             cur.setValue(cur.id);
         }
-        // printId("after dfs");
     }
 
     std::cout << getAliveTotalDamaged() << '\n';
