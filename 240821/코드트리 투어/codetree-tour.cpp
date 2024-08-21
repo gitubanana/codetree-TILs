@@ -92,6 +92,7 @@ inline void    createSale(void)
 
     t_sale &cur = sales[id];
     std::cin >> cur.revenue >> cur.dest;
+    deleted[id] = false;
 
     int money = cur.revenue - dists[cur.dest];
     if (money >= 0)
