@@ -1,9 +1,7 @@
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 #include <queue>
-#include <set>
-#define CURBEST bestSales[curIdx]
-#define NEXTBEST bestSales[nextIdx]
 
 enum e_cmd
 {
@@ -38,9 +36,9 @@ struct t_cmp
     inline bool operator<(const t_cmp &other) const
     {
         if (this->money == other.money)
-            return (this->id < other.id);
+            return (this->id > other.id);
 
-        return (this->money > other.money);
+        return (this->money < other.money);
     }
 };
 
@@ -50,10 +48,10 @@ const int INF = 1e9;
 
 int vCnt;
 int dists[MAX_V];
-t_sale sales[MAX_ID + 1];
-int curIdx, nextIdx;
-std::set<t_cmp> bestSales[2];
+bool deleted[MAX_ID + 1];
 std::vector<t_edge> edges[MAX_V];
+std::priority_queue<t_cmp> bestSales;
+std::unordered_map<int, t_sale> sales;
 
 void    dijkstra(int start=0)
 {
@@ -87,7 +85,7 @@ void    dijkstra(int start=0)
     }
 }
 
-void    createSale(void)
+inline void    createSale(void)
 {
     int id;
     std::cin >> id;
@@ -95,28 +93,35 @@ void    createSale(void)
     t_sale &cur = sales[id];
     std::cin >> cur.revenue >> cur.dest;
 
-    CURBEST.insert({id, cur.revenue - dists[cur.dest]});
+    int money = cur.revenue - dists[cur.dest];
+    if (money >= 0)
+    {
+        bestSales.push({id, money});
+    }
 }
 
-void    cancelSale(void)
+inline void    cancelSale(void)
 {
     int id;
-    std::cin >> id;
 
-    t_sale &cur = sales[id];
-    CURBEST.erase({id, cur.revenue - dists[cur.dest]});
+    std::cin >> id;
+    deleted[id] = true;
+    sales.erase(id);
 }
 
-void    printBestSale(void)
+inline void    printBestSale(void)
 {
     int bestId = -1;
 
-    for (const t_cmp &cur : CURBEST)
+    while (!bestSales.empty())
     {
-        if (cur.money >= 0)
+        const t_cmp cur = bestSales.top();
+        bestSales.pop();
+
+        if (!deleted[cur.id])
         {
             bestId = cur.id;
-            CURBEST.erase(cur);
+            sales.erase(cur.id);
             break ;
         }
     }
@@ -130,18 +135,18 @@ void    changeStart(void)
     std::cin >> start;
 
     dijkstra(start);
-
-    nextIdx = curIdx ^ 1;
-
-    NEXTBEST.clear();
-    for (const t_cmp &cur : CURBEST)
+    bestSales = std::priority_queue<t_cmp>();
+    for (std::pair<const int, t_sale> &cur : sales)
     {
-        t_sale &sale = sales[cur.id];
+        const int &id = cur.first;
+        const t_sale &sale = cur.second;
+        int money = sale.revenue - dists[sale.dest];
 
-        NEXTBEST.insert({cur.id, sale.revenue - dists[sale.dest]});
+        if (money >= 0)
+        {
+            bestSales.push({id, money});
+        }
     }
-
-    curIdx = nextIdx;
 }
 
 int main()
